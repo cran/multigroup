@@ -1,0 +1,73 @@
+\name{DSTATIS}
+\alias{DSTATIS}
+\title{Dual STATIS}
+\usage{
+DSTATIS(Data, Group, ncomp = NULL, Scale = FALSE, graph = FALSE)
+}
+\arguments{
+  \item{Data}{a numeric matrix or data frame}
+
+  \item{Group}{a vector of factors associated with group
+  structure}
+
+  \item{ncomp}{number of components, if NULL number of
+  components is equal to 2}
+
+  \item{Scale}{scaling variables, by defalt is False. By
+  default data are centered within groups.}
+
+  \item{graph}{should loading and component be plotted}
+}
+\value{
+list with the following results:
+
+\item{Data}{original data}
+
+\item{Con.Data}{Concatenated centered data}
+
+\item{split.Data}{Group centered data}
+
+\item{Group}{Group as a factor vector}
+
+\item{RV}{the RV coefficient matrix}
+
+\item{weights}{vector of weights}
+
+\item{compromise.matrix}{compromise variance-covariance
+matrix}
+
+\item{loadings.common}{Matrix of common loadings}
+
+\item{lambda}{The specific variances of group}
+}
+\description{
+Dual STATIS
+}
+\examples{
+Data = iris[,-5]
+Group = iris[,5]
+res.DSTATIS = DSTATIS(Data, Group, graph=TRUE)
+loadingsplot(res.DSTATIS, axes=c(1,2))
+scoreplot(res.DSTATIS, axes=c(1,2))
+}
+\references{
+C. Lavit (1988). \emph{Analyse conjointe de tableaux
+quantitatifs}. Masson.
+
+C. Lavit, Y. Escoufier, R. Sabatier and P. Traissac (1994).
+The ACT (STATIS method). \emph{Computational Statistics &
+Data Analysis}, 18, 97-117.
+
+A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013).
+General overview of methods of analysis of multi-group
+datasets, \emph{Revue des Nouvelles Technologies de
+l'Information}, 25, 108-123.
+}
+\seealso{
+\code{\link{mgPCA}}, \code{\link{FCPCA}},
+\code{\link{DCCSWA}}, \code{\link{BGC}},
+\code{\link{DGPA}}, \code{\link{summarize}},
+\code{\link{TBWvariance}}, \code{\link{loadingsplot}},
+\code{\link{scoreplot}}, \code{\link{iris}}
+}
+

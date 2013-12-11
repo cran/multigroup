@@ -1,0 +1,48 @@
+\name{TBWvariance}
+\alias{TBWvariance}
+\title{Total, within and between-group variances}
+\usage{
+TBWvariance(Data, Group)
+}
+\arguments{
+  \item{Data}{a numeric matrix or data frame}
+
+  \item{Group}{a vector of factors associated with group
+  structure}
+}
+\value{
+list with the following results:
+
+\item{Within.Var}{within-group variance-covariance matrix}
+
+\item{Between.Var}{between-group variance-covariance
+matrix}
+
+\item{Toatal.Var}{total variance-covariance matrix}
+
+\item{Btween.per}{Within-group variance percentage}
+
+\item{Btween.per}{Between-group variance percentage}
+}
+\description{
+Calculation of total, within- and between-group
+variance-covariance matrices
+}
+\examples{
+Data = iris[,-5]
+Group = iris[,5]
+res = TBWvariance(Data, Group)
+}
+\references{
+A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013).
+General overview of methods of analysis of multi-group
+datasets, \emph{Revue des Nouvelles Technologies de
+l'Information}, 25, 108-123.
+}
+\seealso{
+\code{\link{mgPCA}}, \code{\link{DGPA}},
+\code{\link{DCCSWA}}, \code{\link{DSTATIS}},
+\code{\link{BGC}}, \code{\link{summarize}},
+\code{\link{iris}}
+}
+

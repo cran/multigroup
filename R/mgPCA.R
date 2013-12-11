@@ -1,0 +1,268 @@
+#' @title Multi-group Principal Component Analysis
+#' 
+#' @description 
+#' Multi-group PCA algorithm (NIPALS for Multi-group PCA)
+#' 
+#' @param Data a numeric matrix or data frame
+#' @param Group a vector of factors associated with group structure
+#' @param ncomp number of components, if NULL number of components is equal to 2
+#' @param Scale scaling variables, by defalt is False. By default data are centered within groups.
+#' @param graph should loading and component be plotted
+#' @return list with the following results:
+#' @return \item{Data}{original data}
+#' @return \item{Con.Data}{Concatenated centered data}
+#' @return \item{split.Data}{Group centered data}
+#' @return \item{Group}{Group as a factor vector}
+#' @return \item{loadings.group}{Loadings associated with each group}
+#' @return \item{score.group}{Scores associated with each group}
+#' @return \item{loadings.common}{Matrix of common loadings}
+#' @return \item{score.Global}{Global scores}
+#' @return \item{cumper.inertigroup}{Cumulative percentage of group components inertia}
+#' @return \item{cumper.inertiglobal}{Cumulative percentage of global component inertia}
+#' @return \item{noncumper.inertiglobal}{Percentage of global component inertia}
+#' @return \item{lambda}{The specific variances of group}
+#' @return \item{exp.var}{Percentages of total variance recovered associated with each dimension }
+#' @seealso \code{\link{BGC}}, \code{\link{FCPCA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{DGPA}}, \code{\link{summarize}}, \code{\link{TBWvariance}}, \code{\link{loadingsplot}}, \code{\link{scoreplot}}, \code{\link{iris}}  
+#' @export
+#' @references A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013). General overview
+#'  of methods of analysis of multi-group datasets,
+#'  \emph{Revue des Nouvelles Technologies de l'Information}, 25, 108-123.
+#'  
+#' @examples
+#' Data = iris[,-5]
+#' Group = iris[,5]
+#' res.mgPCA = mgPCA (Data, Group, graph=TRUE)
+#' loadingsplot(res.mgPCA, axes=c(1,2))
+#' scoreplot(res.mgPCA, axes=c(1,2))
+mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
+  require(MASS)
+
+  
+  #=========================================================================
+  #                             1. Checking the inputs
+  #=========================================================================
+  check(Data, Group)
+  
+  
+  #=========================================================================
+  #                              2. preparing Data
+  #=========================================================================
+  if (class(Data) == 'data.frame') {
+    Data=as.matrix(Data)
+  }
+  if(is.null(ncomp)) {ncomp=2}
+  if(is.null(colnames(Data))) {
+    colnames(Data) = paste('V', 1:ncol(Data), sep='')
+  }
+  Group = as.factor(Group)
+  
+  
+  
+  rownames(Data) = Group                 #---- rownames of data=groups
+  M = length(levels(Group))              #----number of groups: M
+  P = dim(Data)[2]                       #----number of variables: P
+  n = as.vector(table(Group))            #----number of individuals in each group
+  N = sum(n)                             #----number of individuals
+  split.Data = split(Data,Group)         #----split Data to M parts 
+  
+  # centering and scaling if TRUE
+  for(m in 1:M){  
+    split.Data[[m]] = matrix(split.Data[[m]], nrow=n[m])
+    split.Data[[m]] = scale(split.Data[[m]], center=TRUE, scale=Scale)
+  }
+  
+  # concatinated dataset by row as groups
+  Con.Data = split.Data[[1]]  
+  for(m in 2:M) {
+    Con.Data = rbind(Con.Data, split.Data[[m]])
+  }
+  rownames(Con.Data) = Group
+  colnames(Con.Data) = colnames(Data)
+  
+  # Variance-covariance matrix for each group
+  cov.Group = vector("list", M)
+  for(m in 1:M){    
+    cov.Group[[m]] = t(split.Data[[m]]) %*% split.Data[[m]] / n[m]
+  }
+  #==========================================================================
+  #  				                      3. Outputs
+  #==========================================================================
+  res <- list(
+    Data       = Data,
+    Con.Data   = Con.Data,
+    split.Data = split.Data,
+    Group=Group)
+  
+  
+  
+  res$loadings.group = vector("list", M)
+  res$score.group = vector("list", M)
+  for(m in 1:M){
+    res$score.group[[m]]=matrix(0, nrow=n[m], ncol=ncomp)
+    #rownames(res$score.group[[m]])=Group
+    colnames(res$score.group[[m]]) = paste("Dim", 1:ncomp, sep="")
+    
+    
+    res$loadings.group[[m]] = matrix(0, nrow=P, ncol=ncomp)
+    rownames(res$loadings.group[[m]]) = colnames(Data)
+    colnames(res$loadings.group[[m]]) = paste("Dim", 1:ncomp, sep="")
+  }
+  
+  res$loadings.common = matrix(0, nrow=P, ncol=ncomp)  
+  rownames(res$loadings.common) = colnames(Data)
+  colnames(res$loadings.common) = paste("Dim", 1:ncomp, sep="")
+  
+  
+  res$score.Global = matrix(0, nrow=N, ncol=ncomp)     
+  rownames(res$score.Global) = Group
+  colnames(res$score.Global) = paste("Dim", 1:ncomp, sep="")
+  
+  
+  res$Group.weight=matrix(0, nrow=M, ncol=ncomp) 
+  rownames(res$Group.weight)=levels(Group)  
+  colnames(res$Group.weight)=paste("Dim", 1:ncomp, sep="")
+  
+  res$cumper.inertigroup=matrix(0, ncol=ncomp,nrow=M)
+  rownames(res$cumper.inertigroup)=levels(Group)
+  colnames(res$cumper.inertigroup)=paste("Dim", 1:ncomp, sep="")
+  
+  res$cumper.inertiglobal=matrix(0, ncol=ncomp,nrow=1)
+  colnames(res$cumper.inertiglobal)=paste("Dim", 1:ncomp, sep="")
+  
+  res$noncumper.inertiglobal=matrix(0, ncol=ncomp,nrow=1)
+  colnames(res$noncumper.inertiglobal)=paste("Dim", 1:ncomp, sep="")
+  #=========================================================================
+  #                          4. NIPALS for multi_group CPCA
+  #=========================================================================
+  eps= 1e-7
+  
+  for(h in 1:ncomp){ 		          #------ for iteration loops
+    threshold=1.0;
+    iNIPALS=0;
+    critt=0  
+    
+    #=======================  4.1 initial value of vector of common loadings
+    w.common = rnorm(P)       
+    w.common = normv(w.common)
+    W=matrix(0, ncol=P, nrow=M)     #------ combined group loadings
+      
+    
+    #======================= 4.2 starting iteration
+    while (threshold > eps) {
+      
+      t.global = matrix(0, ncol=1)  # concatinated components
+      
+      
+      # 4.2.1 group analysis
+      for (m in 1:M){     
+        t.group = (split.Data[[m]]) %*% w.common
+        t.group = normv(t.group)
+        res$score.group[[m]][,h]=t.group
+        t.global=rbind(t.global,t.group)
+        
+        w.group=t(split.Data[[m]])%*%t.group             # group loadings
+        res$loadings.group[[m]][,h]=w.group
+        W[m,]=w.group                                # combined group loadings
+      }
+      
+      res$score.Global[,h]= Con.Data %*% w.common   
+      
+      # 4.2.2 new value of common loadings (w.common)
+      Group.weight = W %*% w.common   # global loading weights, W is projected to w
+      Group.weight = normv(Group.weight)
+      res$Group.weight[,h] = Group.weight
+      w.common = t(t(Group.weight) %*% W )
+      w.common = normv(w.common)
+      
+      
+      
+      # 4.2.3  criterion  
+      iNIPALS=iNIPALS+1
+      Crit=0
+      for(m in 1:M){
+        Crit= Crit+(t(res$score.group[[m]][,h])%*% 
+                          (split.Data[[m]]) %*% w.common %*% t(w.common) 
+                        %*% t(split.Data[[m]]) %*%
+                          res$score.group[[m]][,h] )
+      }
+      critt[iNIPALS]=Crit
+      
+      if (iNIPALS>1){
+        threshold=critt[iNIPALS]-critt[(iNIPALS-1)]
+      }
+      
+      
+      res$loadings.common[,h]=w.common
+           
+    } # end of iteration
+    
+    #=========================================================================
+    #                               5. Explained variance 
+    #=========================================================================
+    for(m in 1:M){
+      project.group=res$score.group[[m]][,1:h] %*% ginv( t(res$score.group[[m]][,1:h]) %*% res$score.group[[m]][,1:h]) %*%   t(res$score.group[[m]][,1:h])
+      projet.data.group=project.group %*% res$split.Data[[m]]
+      res$cumper.inertigroup[m,h]=100*sum(diag(t(projet.data.group) %*% projet.data.group))/ sum(diag(t(res$split.Data[[m]]) %*% res$split.Data[[m]]))
+    }
+    
+    
+    project.global=res$score.Global[,1:h] %*% ginv( t(res$score.Global[,1:h]) %*% res$score.Global[,1:h]) %*%   t(res$score.Global[,1:h])
+    projet.data.global=project.global%*% res$Con.Data
+    res$cumper.inertiglobal[h]=100*sum(diag(t(projet.data.global) %*% projet.data.global))/ sum(diag(t(res$Con.Data) %*% res$Con.Data))
+    
+    projectn.global=res$score.Global[,h] %*% ginv( t(res$score.Global[,h]) %*% res$score.Global[,h]) %*%   t(res$score.Global[,h])
+    projetn.data.global=projectn.global%*% res$Con.Data
+    res$noncumper.inertiglobal[h]=100*sum(diag(t(projetn.data.global) %*% projetn.data.global))/ sum(diag(t(res$Con.Data) %*%res$Con.Data))
+    
+    #=========================================================================
+    #                                   Deflation 
+    #=========================================================================
+    Con.Data= deflation(Con.Data, res$score.Global[,h])
+    rownames(Con.Data) = Group
+    split.Data = split(Con.Data,Group)  
+    
+    for(m in 1:M){  
+      split.Data[[m]] = matrix(split.Data[[m]],ncol=P)
+      colnames(split.Data[[m]]) = colnames(Con.Data)
+    }
+    
+    
+  }  #------ END OF DIMENSION
+  
+  lambda = matrix(0, nrow=M, ncol=ncomp)
+  for(m in 1:M){
+    lambda[m,]=round(diag(t(res$loadings.common) %*% cov.Group[[m]] %*% res$loadings.common),3)
+  }
+  res$lambda = lambda
+  rownames(res$lambda) = levels(Group)
+  colnames(res$lambda) = paste("Dim", 1:ncomp, sep="")
+
+  exp.var = matrix(0,M,ncomp)
+  for(m in 1:M){
+    exp.var[m,] = 100 * lambda[m,]/ sum(diag(cov.Group[[m]]))
+  }
+  res$exp.var = exp.var
+  rownames(res$exp.var) = levels(Group)
+  colnames(res$exp.var) = paste("Dim", 1:ncomp, sep="")
+    
+  
+  if(graph) {plot.mg(res)}
+  
+  # add class
+  class(res) = c("mgpca", "mg")
+  return(res)
+}
+
+
+#' @S3method print mgpca
+print.mgpca <- function(x, ...)
+{
+  cat("\nMulti-group Principal Component Analysis\n")
+  cat(rep("-",43), sep="")
+  cat("\n$score.group       ", "score groups")
+  cat("\n$loadings.common   ", "common loadings")
+  cat("\n$Data              ", "Data set")
+  cat("\n")
+  invisible(x)
+}
+  
