@@ -1,11 +1,11 @@
 \name{scoreplot}
 \alias{scoreplot}
-\title{Score plot for multi-group data}
+\title{Score plot for multigroup data}
 \usage{
-scoreplot(x, axes = c(1, 2), cex = NULL, font.lab = NULL)
+  scoreplot(x, axes = c(1, 2), cex = NULL, font.lab = NULL)
 }
 \arguments{
-  \item{x}{results of the proposed multi-group methods in
+  \item{x}{results of the proposed multigroup methods in
   the package}
 
   \item{axes}{a vector of two selected components}
@@ -15,10 +15,10 @@ scoreplot(x, axes = c(1, 2), cex = NULL, font.lab = NULL)
   \item{font.lab}{type of font by default 3}
 }
 \value{
-score plot
+  score plot
 }
 \description{
-plots of individuals
+  plots of individuals
 }
 \examples{
 Data = iris[,-5]

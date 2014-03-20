@@ -7,25 +7,36 @@
 #' @param Group a vector of factors associated with group structure
 #' @param numc number of components assocaited with PCA on each group
 #' @param ncomp number of components, if NULL number of components is equal to 2
-#' @param Scale scaling variables, by defalt is False. By default data are centered within groups. 
+#' @param Scale scaling variables, by defalt is FALSE. By default data are centered within groups
 #' @param graph should loading and component be plotted
 #' @return list with the following results:
-#' @return \item{Data}{original data}
-#' @return \item{Con.Data}{Concatenated centered data}
-#' @return \item{split.Data}{Group centered data}
-#' @return \item{Group}{Group as a factor vector}
-#' @return \item{loadings.common}{Matrix of common loadings}
-#' @return \item{lambda}{The specific variances of group}
-#' @return \item{exp.var}{Percentages of total variance recovered associated with each dimension }
+#' @return \item{Data       }{Original data}
+#' @return \item{Con.Data       }{Concatenated centered data}
+#' @return \item{split.Data       }{Group centered data}
+#' @return \item{Group       }{Group as a factor vector}
+#' @return \item{loadings.common       }{Matrix of common loadings}
+#' @return \item{lambda       }{The specific variances of groups}
+#' @return \item{exp.var       }{Percentages of total variance recovered associated with each dimension }
 #' @seealso \code{\link{mgPCA}}, \code{\link{FCPCA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{DGPA}}, \code{\link{summarize}}, \code{\link{TBWvariance}}, \code{\link{loadingsplot}}, \code{\link{scoreplot}}, \code{\link{iris}}  
 #' @export
+#' 
+#' 
 #' @references W. J. Krzanowski (1979). Between-groups comparison of principal components,
 #'  \emph{Journal of the American Statistical Association}, 74, 703-707.
 #'  
-#' A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013). General overview
+#' @references A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013). General overview
 #'  of methods of analysis of multi-group datasets,
 #'  \emph{Revue des Nouvelles Technologies de l'Information}, 25, 108-123.
+#' 
 #'  
+#' @references A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013). Analyses
+#' factorielles de donnees structurees en groupes d'individus,
+#' \emph{Journal de la Societe Francaise de Statistique}, 154(3), 44-57.
+#' 
+#'    
+#'     
+#'      
+#'        
 #' @examples
 #' Data = iris[,-5]
 #' Group = iris[,5]

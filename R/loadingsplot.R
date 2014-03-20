@@ -1,6 +1,6 @@
 #' @title loadings plot
 #' @description plots of variables (loadings)
-#' @param x results of the proposed multi-group methods in the package
+#' @param x results of the proposed multigroup methods in the package
 #' @param axes a vector of two selected components 
 #' @param cex character expansion for text by default .85
 #' @param font.lab type of font by default 3
@@ -49,7 +49,7 @@ loadingsplot <- function(x, axes=c(1,2), cex=NULL, font.lab= NULL){
   lim = c(minlimx, maxlimx)
   plot(w1,w2, type="n",ylim=lim ,xlim=lim ,xlab =lab.x, 
        ylab=lab.y,main="Loading plot",asp= 1)
-  abline(h = 0, v = 0)
+  abline(h = 0, v = 0, col= "gray60")
   www = cbind(w1,w2)
   text(www,labels=rownames(AA), cex=cex, font.lab= font.lab) 
 }

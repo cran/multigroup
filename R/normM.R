@@ -6,6 +6,7 @@
 #' @param X a numeric matrix
 #' @return a matrix with norm 1
 #' @export
+#' @keywords internal
 normM <- function(X){
   
   if (class(X) == 'data.frame') {

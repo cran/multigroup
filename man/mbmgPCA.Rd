@@ -1,0 +1,106 @@
+\name{mbmgPCA}
+\alias{mbmgPCA}
+\title{multiblock and multigroup PCA}
+\usage{
+  mbmgPCA(Data, Group, nBlock, Block.name = NULL,
+    ncomp = NULL, niter = NULL, ScaleGroup = FALSE,
+    ScaleDataA = FALSE, ScaleDataB = FALSE, norm = FALSE)
+}
+\arguments{
+  \item{Data}{a numeric (quantitative) matrix or data
+  frame}
+
+  \item{Group}{a vector of factors associated with group
+  structure}
+
+  \item{nBlock}{a vector of number of variables in each
+  block}
+
+  \item{Block.name}{vector of name of blocks}
+
+  \item{ncomp}{number of components, if NULL number of
+  components is equal to min(rank(Data), M-1)}
+
+  \item{niter}{number of iteration, if NULL number of
+  iteration is equal to 10}
+
+  \item{ScaleGroup}{scaling variables in each group and
+  block, by defalt is FALSE}
+
+  \item{ScaleDataA}{scaling variables in each block after
+  group preprocessing, by defalt is FALSE}
+
+  \item{ScaleDataB}{scaling variables in each block befor
+  group preprocessing, by defalt is FALSE}
+
+  \item{norm}{normalize each block, by defalt is FALSE}
+}
+\value{
+  list with the following results:
+
+  \item{K.Data}{Block data}
+
+  \item{concat.Data}{Concatenated data}
+
+  \item{concat.block.Data}{Block concatenated data}
+
+  \item{res.iter}{Result of iteration}
+
+  \item{CRIT.h}{Maximization criterion for each diemnsion}
+
+  \item{CRIT}{Maximization criterion}
+
+  \item{crit.group}{Maximization criterion associated with
+  each group}
+
+  \item{crit.block}{Maximization criterion associated with
+  each block}
+
+  \item{omega}{Weight of each block in construction of
+  common scores}
+
+  \item{block.common.loading}{Common loadings for each
+  block}
+
+  \item{block.group.loadings}{Partial loadings for each
+  block and group}
+
+  \item{similarity}{Similarity among common and partial
+  loadings for each block}
+
+  \item{global.scores}{Global scores among blocks}
+
+  \item{block.scores}{Scores for each block}
+
+  \item{block.group.scores}{Scores for each block and
+  group}
+
+  \item{block.scores}{Scores for each block}
+
+  \item{global.expvar}{Global explained variance}
+
+  \item{cum.exp.var.block.group}{Cumulative explained
+  variance for each block and group}
+}
+\description{
+  multiblock and multigroup PCA (mbmgPCA)
+}
+\examples{
+data(wine)
+Select=c(which(wine[,2]=="Env1"),which(wine[,2]=="Env2"),which(wine[,2]=="Reference"))
+WineData = wine[Select,-c(1,2)]
+Group <- as.factor(c(rep("Env1",7), rep("Env2",5), rep("Reference",7)))
+nBlock <- c(5, 3, 10, 9)
+BlockNames    <- c("Olfaction at rest", "Vision", "Olfaction  after shaking", "Taste")
+res = mbmgPCA(Data = WineData, Group, nBlock , ncomp=5)
+}
+\references{
+  A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard,
+  Under Review. Multivariate data analysis of multi-groups
+  datasets. Application to sensory analysis,
+  \emph{Chemolab}, 25, 108-123.
+}
+\seealso{
+  \code{\link{mgPCA}}
+}
+

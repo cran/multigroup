@@ -2,10 +2,11 @@
 \alias{loadingsplot}
 \title{loadings plot}
 \usage{
-loadingsplot(x, axes = c(1, 2), cex = NULL, font.lab = NULL)
+  loadingsplot(x, axes = c(1, 2), cex = NULL,
+    font.lab = NULL)
 }
 \arguments{
-  \item{x}{results of the proposed multi-group methods in
+  \item{x}{results of the proposed multigroup methods in
   the package}
 
   \item{axes}{a vector of two selected components}
@@ -15,10 +16,10 @@ loadingsplot(x, axes = c(1, 2), cex = NULL, font.lab = NULL)
   \item{font.lab}{type of font by default 3}
 }
 \value{
-loadings plot
+  loadings plot
 }
 \description{
-plots of variables (loadings)
+  plots of variables (loadings)
 }
 \examples{
 Data = iris[,-5]

@@ -6,10 +6,10 @@
 #' @param Data a numeric matrix or data frame
 #' @param Group a vector of factors associated with group structure
 #' @return list with the following results:
-#' @return \item{Global.summary}{summary of globala data}
-#' @return \item{Group.summary}{summary of group datasets}
-#' @return \item{mean.between.data}{matrix of Group mean}
-#' @return \item{mean.within.data}{matrix of group centered data}
+#' @return \item{Global.summary}{     summary of globala data}
+#' @return \item{Group.summary}{      summary of group datasets}
+#' @return \item{mean.between.data}{      matrix of Group mean}
+#' @return \item{mean.within.data}{     matrix of group centered data}
 #' @seealso  \code{\link{mgPCA}}, \code{\link{DGPA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{BGC}}, \code{\link{TBWvariance}}, \code{\link{iris}}   
 #' @export
 #' @examples

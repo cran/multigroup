@@ -4,6 +4,7 @@
 #' @param x a numeric vector
 #' @return a vector with norm 1
 #' @export
+#' @keywords internal
 normv <- function(x){
   
   normx = sqrt(sum(x * x))

@@ -1,6 +1,6 @@
-#' @title Score plot for multi-group data
+#' @title Score plot for multigroup data
 #' @description plots of individuals 
-#' @param x results of the proposed multi-group methods in the package
+#' @param x results of the proposed multigroup methods in the package
 #' @param axes a vector of two selected components 
 #' @param cex character expansion for text by default .85
 #' @param font.lab type of font by default 3
@@ -47,7 +47,8 @@ scoreplot <- function(x, axes=c(1,2), cex=NULL, font.lab= NULL){
   lab.y <- paste("Dim ", yax, sep = "")
   labs_col = cooll(nlevels(Group), alfa=1)
   rep.labs_col=rep(labs_col, as.vector(table(Group)))
-  plot(Ts[,xax], Ts[,yax], xlab = lab.x, ylab = lab.y, type="n", main = "Individual plot")  
+  plot(Ts[,xax], Ts[,yax], xlab = lab.x, ylab = lab.y, type="n", main = "Individual plot") 
+  abline(h = 0, v = 0, col= "gray60")
   text(Ts, labels=rownames(Ts), cex=cex, font.lab=font.lab, col=rep.labs_col)
 
     

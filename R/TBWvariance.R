@@ -1,4 +1,4 @@
-#' @title Total, within and between-group variances
+#' @title Total, within- and between-group variances
 #' 
 #' @description 
 #' Calculation of total, within- and between-group variance-covariance matrices
@@ -8,7 +8,7 @@
 #' @return list with the following results:
 #' @return \item{Within.Var}{within-group variance-covariance matrix}
 #' @return \item{Between.Var}{between-group variance-covariance matrix}
-#' @return \item{Toatal.Var}{total variance-covariance matrix}
+#' @return \item{Total.Var}{total variance-covariance matrix}
 #' @return \item{Btween.per}{Within-group variance percentage}
 #' @return \item{Btween.per}{Between-group variance percentage}
 #' @seealso \code{\link{mgPCA}}, \code{\link{DGPA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{BGC}}, \code{\link{summarize}}, \code{\link{iris}}  

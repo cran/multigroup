@@ -2,7 +2,8 @@
 \alias{plot.mg}
 \title{Plots for multi-group objects}
 \usage{
-\method{plot}{mg}(x, axes = c(1, 2), cex = NULL, font.lab = NULL, ...)
+  \method{plot}{mg} (x, axes = c(1, 2), cex = NULL,
+    font.lab = NULL, ...)
 }
 \arguments{
   \item{x}{results of multi-group method in the package}
@@ -13,13 +14,13 @@
 
   \item{font.lab}{type of font by default 3}
 
-  \item{\dots}{Further arguments are ignored.}
+  \item{\dots}{Further arguments are ignored}
 }
 \value{
-loadings and scores plots
+  loadings and scores plots
 }
 \description{
-plots of variables (loadings) and individuals (scores) if
-TRUE
+  plots of variables (loadings) and individuals (scores) if
+  TRUE
 }
 

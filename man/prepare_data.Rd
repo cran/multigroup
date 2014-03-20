@@ -1,0 +1,20 @@
+\name{prepare_data}
+\alias{prepare_data}
+\title{Preparing data}
+\usage{
+  prepare_data(Data, Group, nBlock, Block.name = NULL,
+    ScaleGroup = FALSE, ScaleDataA = FALSE,
+    ScaleDataB = FALSE, norm = FALSE)
+}
+\arguments{
+  \item{The}{input parameters of the main function}
+}
+\value{
+  Prepared data. Variables are centered with each group and
+  block. Other preprocessing are voluntary
+}
+\description{
+  To preparing data for doing the analysis
+}
+\keyword{internal}
+
