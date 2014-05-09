@@ -4,7 +4,7 @@
 
 \docType{data}
 
-\title{Wine}
+\title{Wine data}
 
 \description{
 The data used here refer to 21 wines of Val de Loire.

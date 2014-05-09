@@ -18,7 +18,7 @@
 \value{
   list with the following results:
 
-  \item{Data}{original data}
+  \item{Data}{Original data}
 
   \item{Con.Data}{Concatenated centered data}
 

@@ -1,12 +1,12 @@
 \name{plot.mg}
 \alias{plot.mg}
-\title{Plots for multi-group objects}
+\title{Plots for multigroup objects}
 \usage{
   \method{plot}{mg} (x, axes = c(1, 2), cex = NULL,
     font.lab = NULL, ...)
 }
 \arguments{
-  \item{x}{results of multi-group method in the package}
+  \item{x}{results of multigroup method in the package}
 
   \item{axes}{by default the first two components}
 

@@ -22,7 +22,7 @@
   \item{mean.within.data}{ matrix of group centered data}
 }
 \description{
-  Summary of multi-group data in global and group parts
+  Summary of multigroup data in global and group parts
 }
 \examples{
 Data = iris[,-5]

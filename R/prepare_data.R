@@ -4,7 +4,7 @@
 #' To preparing data for doing the analysis
 #' 
 #' @param The input parameters of the main function
-#' @return Prepared data. Variables are centered with each group and block. Other preprocessing are voluntary
+#' @return Prepared data. Variables are centered within each group and block. Other preprocessing are voluntary
 #' @export
 #' @keywords internal
 prepare_data= function(Data, Group, nBlock,   Block.name=NULL,

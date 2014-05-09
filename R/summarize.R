@@ -1,7 +1,7 @@
 #' @title Summary
 #' 
 #' @description 
-#' Summary of multi-group data in global and group parts
+#' Summary of multigroup data in global and group parts
 #' 
 #' @param Data a numeric matrix or data frame
 #' @param Group a vector of factors associated with group structure

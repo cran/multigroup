@@ -13,9 +13,9 @@
 #' @return \item{Con.Data}{Concatenated centered data}
 #' @return \item{split.Data}{Group centered data}
 #' @return \item{Group}{Group as a factor vector}
-#' @return \item{RV}{the RV coefficient matrix}
-#' @return \item{weights}{vector of weights}
-#' @return \item{compromise.matrix}{compromise variance-covariance matrix}
+#' @return \item{RV}{The RV coefficient matrix}
+#' @return \item{weights}{Vector of weights}
+#' @return \item{compromise.matrix}{Compromise variance-covariance matrix}
 #' @return \item{loadings.common}{Matrix of common loadings}
 #' @return \item{lambda}{The specific variances of group}
 #' @seealso \code{\link{mgPCA}}, \code{\link{FCPCA}}, \code{\link{DCCSWA}}, \code{\link{BGC}}, \code{\link{DGPA}}, \code{\link{summarize}}, \code{\link{TBWvariance}}, \code{\link{loadingsplot}}, \code{\link{scoreplot}}, \code{\link{iris}}  

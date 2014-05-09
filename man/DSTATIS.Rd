@@ -30,11 +30,11 @@
 
   \item{Group}{Group as a factor vector}
 
-  \item{RV}{the RV coefficient matrix}
+  \item{RV}{The RV coefficient matrix}
 
-  \item{weights}{vector of weights}
+  \item{weights}{Vector of weights}
 
-  \item{compromise.matrix}{compromise variance-covariance
+  \item{compromise.matrix}{Compromise variance-covariance
   matrix}
 
   \item{loadings.common}{Matrix of common loadings}

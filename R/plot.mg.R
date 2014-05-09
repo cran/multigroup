@@ -1,6 +1,6 @@
-#' @title Plots for multi-group objects 
+#' @title Plots for multigroup objects 
 #' @description plots of variables (loadings) and individuals (scores) if TRUE
-#' @param x results of multi-group method in the package
+#' @param x results of multigroup method in the package
 #' @param axes by default the first two components
 #' @param cex character expansion for text by default .85
 #' @param font.lab type of font by default 3

@@ -8,7 +8,7 @@
 #' @param Scale scaling variables, by default is False. By default data are centered within groups. 
 #' @param graph should loading and component be plotted
 #' @return list with the following results:
-#' @return \item{Data}{original data}
+#' @return \item{Data}{Original data}
 #' @return \item{Con.Data}{Concatenated centered data}
 #' @return \item{split.Data}{Group centered data}
 #' @return \item{Group}{Group as a factor vector}
