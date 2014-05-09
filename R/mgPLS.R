@@ -117,44 +117,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   colnames(Concat.Y) = colnames(DataY)
   rownames(Concat.X) = rownames(DataX)
   rownames(Concat.Y) = rownames(DataY)
-  #-------------------- data for model
-  ##  Concat.X = Concat.X
-  ## Concat.Y = Concat.Y
-  ## DataXm = DataXm   
-  ## DataYm = DataYm  
-  #--------------------
-  
-  # if(SCALEAC==TRUE){  # if global scaleing after group centering is TRUE
-  # if(M>1){
-  #  Xw = data_groupX[[1]]
-  #  Yw = data_groupY[[1]]
-  #  for (m in 2:M){
-  #    Xw = rbind(Xw, data_groupX[[m]])
-  #    Yw = rbind(Yw, data_groupY[[m]])
-  #  }
-  #  X.Data  = scale(Xw , center = FALSE, scale = FALSE)
-  #  Y.Data  = scale(Yw , center = FALSE, scale = FALSE)
-  #  dataa=read_data_group(DataX = X.Data, DataY=Y.Data,Group)
-  #  data_groupX=dataa$data_groupX
-  #  data_groupY=dataa$data_groupY
-  #}
-  #
-  ##if(M==1){
-  ##  data_groupX[[1]]=scale(data_groupX[[1]],center=Center,scale=FALSE)
-  ##  data_groupY[[1]]=scale(data_groupY[[1]],center=Center,scale=FALSE)
-  ##  }
-  #
-  #}
-  #----------------------- concatenated dataset by row as groups
-  ## Concat.X = data_groupX[[1]]  # concatenated dataset by row as groups
-  ## Concat.Y = data_groupY[[1]]  # concatenated dataset by row as groups
-  #
-  #if(M>1){
-  #   for(m in 2:M){
-  #     Concat.X = rbind(Concat.X, data_groupX[[m]])
-  #     Concat.Y = rbind(Concat.Y, data_groupY[[m]])
-  #    }
-  #}
   
   #---------------------------------------------------------------------------
   #					    OUTPUT
@@ -189,8 +151,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   ppbeta = matrix(0,nrow=P,ncol=H)
   betay  = vector("list",H)
   #------------------------ 
-  #res$exp_var_xm = matrix(0,nrow=M,ncol=H)
-  #res$cum_exp_var_xm = matrix(0,nrow=M,ncol=H)
   cum.expvar.Xm = matrix(0, ncol=H, nrow=M)
   cum.expvar.Ym = matrix(0, ncol=H, nrow=M)
   #------------------------ to calculate norm 
@@ -202,7 +162,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   #                      NIPALS for TWO-BLOCK MULTI-GROUP
   #---------------------------------------------------------------------------
   for(h in 1:H){
-    
     eps = 1e-6     # for iteration loops
     #w= svd(t(Concat.X) %*% Concat.Y) $u[,1] # initial value of w
     w = rnorm(P)
@@ -266,12 +225,9 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
       #-------------check convergence -------------- 
       iter=iter+1
       if (iter > 1){
-        xT= crossprod(t-tTold) 
-        #  xw=c(t(w-wTold)  %*% (w-wTold))
-        
-        #  yT=c(t(u-uTold)  %*% (u-uTold))
+        xT = crossprod(t-tTold) 
         yw = crossprod(v-vTold)  
-        x = max(xT,yw);
+        x  = max(xT,yw);
       }
       covv[iter]=(cov(u, t))
       tTold= t;
@@ -324,33 +280,20 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     #------------------------ explained variance 
     exp_var_new= 100* as.numeric(t(t) %*% res$Concat.X %*% t(res$Concat.X) %*% t/ as.vector((t(t)%*%t)) )/nor2x
     exp_var=append(exp_var, exp_var_new)
-    
-    
+  
     exp_var_newy= 100* as.numeric(t(t) %*% res$Concat.Y %*% t(res$Concat.Y) %*% t/ as.vector((t(t)%*%t)) )/nor2y
     exp_vary=append(exp_vary, exp_var_newy)
-    
-    
-    #------------------------
-    # for(m in 1:M){ 
-    #   nor2xm = sum((DataXm[[m]])^2)
-    #   varr_xm=t(aCommonX[,h]) %*% t(DataXm[[m]]) %*% DataXm[[m]] %*% aCommonX[,h]
-    #    res$exp_var_xm[m,h]=100*varr_xm/nor2xm
-    #  }
-    
-    
+  
     #---------------------------------- #Split Data
     DataXm = split(Concat.X, Group)  
     DataYm = split(Concat.Y, Group)
-    #grouprname=split(rownames(Concat.X),Group)
     
     for(m in 1:M){  # dataset in form of matrix
       DataXm[[m]] = matrix(DataXm[[m]], ncol=P)
       colnames(DataXm[[m]]) = colnames(Concat.X)
-      #rownames(DataXm[[m]])=grouprname[[m]]
       
       DataYm[[m]] = matrix(DataYm[[m]], ncol=Q)
       colnames(DataYm[[m]]) = colnames(Concat.Y)
-      #rownames(DataYm[[m]])=grouprname[[m]]
     }
     #-----------------------
   }  # END OF DIMENSION
@@ -360,7 +303,7 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   #---------------------------------------------------------------------------
   expvarX = exp_var[-1]
   cumexpvarX = cumsum(expvarX)
-  
+
   EVX = matrix(c(expvarX, cumexpvarX), ncol=2)
   rownames(EVX) = paste("Dim", 1:H, sep="")
   colnames(EVX) = c("Explained.Var", "Cumulative")  
@@ -372,13 +315,7 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   rownames(EVY) = paste("Dim", 1:H, sep="")
   colnames(EVY) = c("Explained.Var", "Cumulative") 
   
-  
   #--------------------------------------------------
-  
-  # for(m in 1:M){
-  #   res$cum_exp_var_xm[m,] = cumsum(res$exp_var_xm[m,])
-  # }
-  
   library(MASS)
   #------------------------
   for(m in 1:M){ 
@@ -404,40 +341,9 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   rownames(res$coefficients.Y) = colnames(res$Concat.Y)
   colnames(res$coefficients.Y) = paste("Dim", 1:H, sep="")
   
-  ###-------------------------------------------------
-  # similarity between block-group loadings and block common loadings
-  ###res$similarity.WG.WC =  matrix(0, nrow=M, ncol=H)
-  ###for(m in 1:M){
-  ###c = 0
-  ###for(h in 1:H){
-  ###  c = c +  abs(sum (aGroupX[[m]][,h] * aCommonX[,h]))
-  ###    res$similarity.WG.WC[m,h] = c/h
-  ###  }
-  ###}
-  
-  
-  ##----------------------------------------------------------------------------
-  ##			          Loadings and individual plots
-  ##----------------------------------------------------------------------------
-  ###res$Aetoile= aCommonX_STAR
-  ###rownames( TGlobalX)= Group
-  ###res$T = TGlobalX
-  
-  
-  ### if(graph==TRUE) {PlotTwoBMG(x=mgpls,axes,groups=Group,cfellipse,cfe)}
-  
-  ##----------------------------------------------------------------------------
-  ##			       10-fold crossvalidation with one iteration: 
-  ##						RMSEC and RMSEV plot
-  ##----------------------------------------------------------------------------
-  ###if(KFCV==TRUE){
-  ###  KFCVres=KFVC_MGPLS(DataXm,DataYm,Group,ITER=1,KF=10,cvgraph)
-  ###}
-  
   ##----------------------------------------------------------------------------
   ##			       Similarity between partial and common loadings 
   ##----------------------------------------------------------------------------
-  ###if(similarity ==TRUE){
   loadings_matricesW = list()
   loadings_matricesW[[1]] = aCommonX
   for(m in 2:(M+1)){
@@ -450,14 +356,12 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     loadings_matricesV[[m]] = bGroupY[[(m-1)]]
   }
   NAMES = c("Commonload", levels(Group))
-  
-  
+    
   similarityA =similarity_function(loadings_matrices=loadings_matricesW, NAMES)
   similarityB =similarity_function(loadings_matrices=loadings_matricesV, NAMES)
   
   similarityA_noncum = similarity_noncum(loadings_matrices=loadings_matricesW, NAMES)
   similarityB_noncum = similarity_noncum(loadings_matrices=loadings_matricesV, NAMES)
-  ### }
   #------------------------------------------------------------------
   rownames(aCommonX) = colnames(res$Concat.X)
   rownames(bCommonY) = colnames(res$Concat.Y)
@@ -475,8 +379,7 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   
   
   res$Components.Global  = list(X = TGlobalX, Y = UGlobalY)
-  res$Components.Group = list(X = TGroupX)
-  #  res$Components.Group = list(X = TGroupX, Y = UGroupY)
+  res$Components.Group   = list(X = TGroupX)
   res$loadings.common    = list(X = aCommonX, Y = bCommonY)
   res$loadings.Group     = list(X = aGroupX, Y = bGroupY)
   
@@ -486,10 +389,8 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   rownames(cum.expvar.Xm) = levels(Group)
   rownames(cum.expvar.Ym) = levels(Group)
   
-  
   res$expvar  = list(X = EVX, Y = EVY)
   res$cum.expvar.Group  = list(X = cum.expvar.Xm, Y = cum.expvar.Ym)
-  
   
   res$Similarity.Common.Group.load          = list(X = similarityA, Y = similarityB)
   res$Similarity.noncum.Common.Group.load   = list(X = similarityA_noncum , Y = similarityB_noncum)

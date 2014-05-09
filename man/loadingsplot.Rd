@@ -2,8 +2,7 @@
 \alias{loadingsplot}
 \title{loadings plot}
 \usage{
-  loadingsplot(x, axes = c(1, 2), cex = NULL,
-    font.lab = NULL)
+loadingsplot(x, axes = c(1, 2), cex = NULL, font.lab = NULL)
 }
 \arguments{
   \item{x}{results of the proposed multigroup methods in
@@ -16,10 +15,10 @@
   \item{font.lab}{type of font by default 3}
 }
 \value{
-  loadings plot
+loadings plot
 }
 \description{
-  plots of variables (loadings)
+plots of variables (loadings)
 }
 \examples{
 Data = iris[,-5]

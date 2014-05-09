@@ -2,9 +2,8 @@
 \alias{select_initial_Iter}
 \title{Selection of initial values}
 \usage{
-  select_initial_Iter(tm = tm, K.Data = K.Data,
-    concat.Data = concat.Data, K = K, M = M, P = P, n = n,
-    N = N)
+select_initial_Iter(tm = tm, K.Data = K.Data, concat.Data = concat.Data,
+  K = K, M = M, P = P, n = n, N = N)
 }
 \arguments{
   \item{X}{a numeric matrix}
@@ -12,10 +11,10 @@
   \item{parametrs}{from iteraite.fun.Iter function}
 }
 \value{
-  maximum of the optimal criterion
+maximum of the optimal criterion
 }
 \description{
-  To Select the initial values
+To Select the initial values
 }
 \keyword{internal}
 

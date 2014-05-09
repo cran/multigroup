@@ -2,7 +2,7 @@
 \alias{FCPCA}
 \title{Flury's Common Principal Component Analysis}
 \usage{
-  FCPCA(Data, Group, Scale = FALSE, graph = FALSE)
+FCPCA(Data, Group, Scale = FALSE, graph = FALSE)
 }
 \arguments{
   \item{Data}{a numeric matrix or data frame}
@@ -16,25 +16,25 @@
   \item{graph}{should loading and component be plotted}
 }
 \value{
-  list with the following results:
+list with the following results:
 
-  \item{Data}{Original data}
+\item{Data}{Original data}
 
-  \item{Con.Data}{Concatenated centered data}
+\item{Con.Data}{Concatenated centered data}
 
-  \item{split.Data}{Group centered data}
+\item{split.Data}{Group centered data}
 
-  \item{Group}{Group as a factor vector}
+\item{Group}{Group as a factor vector}
 
-  \item{loadings.common}{Matrix of common loadings}
+\item{loadings.common}{Matrix of common loadings}
 
-  \item{lambda}{The specific variances of group}
+\item{lambda}{The specific variances of group}
 
-  \item{exp.var}{Percentages of total variance recovered
-  associated with each dimension }
+\item{exp.var}{Percentages of total variance recovered
+associated with each dimension }
 }
 \description{
-  Common principal component Analysis
+Common principal component Analysis
 }
 \examples{
 Data = iris[,-5]
@@ -44,20 +44,20 @@ loadingsplot(res.FCPCA, axes=c(1,2))
 scoreplot(res.FCPCA, axes=c(1,2))
 }
 \references{
-  B. N. Flury (1984). Common principal components in k
-  groups.  \emph{Journal of the American Statistical
-  Association}, 79, 892-898.
+B. N. Flury (1984). Common principal components in k
+groups.  \emph{Journal of the American Statistical
+Association}, 79, 892-898.
 
-  A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard
-  (2013). General overview of methods of analysis of
-  multi-group datasets, \emph{Revue des Nouvelles
-  Technologies de l'Information}, 25, 108-123.
+A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013).
+General overview of methods of analysis of multi-group
+datasets, \emph{Revue des Nouvelles Technologies de
+l'Information}, 25, 108-123.
 }
 \seealso{
-  \code{\link{mgPCA}}, \code{\link{DGPA}},
-  \code{\link{DCCSWA}}, \code{\link{DSTATIS}},
-  code{\link{BGC}}, code{\link{summarize}},
-  code{\link{TBWvariance}}, \code{\link{loadingsplot}},
-  \code{\link{scoreplot}}, \code{\link{iris}}
+\code{\link{mgPCA}}, \code{\link{DGPA}},
+\code{\link{DCCSWA}}, \code{\link{DSTATIS}},
+code{\link{BGC}}, code{\link{summarize}},
+code{\link{TBWvariance}}, \code{\link{loadingsplot}},
+\code{\link{scoreplot}}, \code{\link{iris}}
 }
 

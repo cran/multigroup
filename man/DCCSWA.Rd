@@ -2,8 +2,7 @@
 \alias{DCCSWA}
 \title{Dual Common Component and Specific Weights Analysis}
 \usage{
-  DCCSWA(Data, Group, ncomp = NULL, Scale = FALSE,
-    graph = FALSE)
+DCCSWA(Data, Group, ncomp = NULL, Scale = FALSE, graph = FALSE)
 }
 \arguments{
   \item{Data}{a numeric matrix or data frame}
@@ -20,30 +19,30 @@
   \item{graph}{should loading and component be plotted}
 }
 \value{
-  list with the following results:
+list with the following results:
 
-  \item{Data}{ Original data}
+\item{Data}{ Original data}
 
-  \item{Con.Data}{ Concatenated centered data}
+\item{Con.Data}{ Concatenated centered data}
 
-  \item{split.Data}{ Group centered data}
+\item{split.Data}{ Group centered data}
 
-  \item{Group}{ Group as a factor vector}
+\item{Group}{ Group as a factor vector}
 
-  \item{loadings.common}{ Matrix of common loadings}
+\item{loadings.common}{ Matrix of common loadings}
 
-  \item{saliences}{ Each group having a specific
-  contribution to the determination of this common space,
-  namely the salience, for each dimension under study}
+\item{saliences}{ Each group having a specific contribution
+to the determination of this common space, namely the
+salience, for each dimension under study}
 
-  \item{lambda}{ The specific variances of groups}
+\item{lambda}{ The specific variances of groups}
 
-  \item{exp.var}{ Percentages of total variance recovered
-  associated with each dimension}
+\item{exp.var}{ Percentages of total variance recovered
+associated with each dimension}
 }
 \description{
-  Dual Common Component and Specific Weights Analysis: to
-  find common structure among variables of different groups
+Dual Common Component and Specific Weights Analysis: to
+find common structure among variables of different groups
 }
 \examples{
 Data = iris[,-5]
@@ -53,20 +52,19 @@ loadingsplot(res.DCCSWA, axes=c(1,2))
 scoreplot(res.DCCSWA, axes=c(1,2))
 }
 \references{
-  E. M. Qannari, P. Courcoux, and E. Vigneau (2001). Common
-  components and specific weights analysis performed on
-  preference data. \emph{Food Quality and Preference},
-  12(5-7), 365-368.
+E. M. Qannari, P. Courcoux, and E. Vigneau (2001). Common
+components and specific weights analysis performed on
+preference data. \emph{Food Quality and Preference},
+12(5-7), 365-368.
 
-  A. Eslami (2013). Multivariate data analysis of
-  multi-group datasets: application to biology. University
-  of Rennes I.
+A. Eslami (2013). Multivariate data analysis of multi-group
+datasets: application to biology. University of Rennes I.
 }
 \seealso{
-  \code{\link{mgPCA}}, \code{\link{FCPCA}},
-  \code{\link{BGC}}, \code{\link{DSTATIS}},
-  \code{\link{DGPA}}, \code{\link{summarize}},
-  \code{\link{TBWvariance}}, \code{\link{loadingsplot}},
-  \code{\link{scoreplot}}, \code{\link{iris}}
+\code{\link{mgPCA}}, \code{\link{FCPCA}},
+\code{\link{BGC}}, \code{\link{DSTATIS}},
+\code{\link{DGPA}}, \code{\link{summarize}},
+\code{\link{TBWvariance}}, \code{\link{loadingsplot}},
+\code{\link{scoreplot}}, \code{\link{iris}}
 }
 
