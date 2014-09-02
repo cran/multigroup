@@ -36,18 +36,37 @@
 #' factorielles de donnces structurces en groupes d'individus,
 #' \emph{Journal de la Societe Francaise de Statistique}, 154(3), 44-57.
 #'    
-#'     
 #'       
 #' @examples
 #' Data = iris[,-5]
 #' Group = iris[,5]
 #' res.mgPCA = mgPCA (Data, Group)
-#' loadingsplot(res.mgPCA, axes=c(1,2))
+#' barplot(res.mgPCA$noncumper.inertiglobal)
+#' #----------------
+#' #Similarity index: group loadings are compared to the common structure (first dimension)
+#' Xzero = rep(0, 3)
+#' MIN = min(res.mgPCA$Similarity.noncum.Common.Group.load[[1]][-1, 1])-0.0005
+#' XLAB = paste("Dim1, %",res.mgPCA$noncumper.inertiglobal[1])
+#' plot(Xzero, res.mgPCA$Similarity.noncum.Common.Group.load[[1]][-1, 1], pch=15, ylim=c(MIN, 1), 
+#' main="Similarity between groups and common structure", xlab=XLAB, ylab="", xaxt="n")
+#' abline(v=0)
+#' abline(h=seq(MIN, 1, by=0.05), col="black", lty=3)
+#' XX=res.mgPCA$Similarity.noncum.Common.Group.load[[1]][-1, 1, drop=FALSE]
+#' text(Xzero, XX, labels=rownames(XX), pos=4)
+#' #----------------
+#' # Similarity index: group loadings are compared to the common structure (dimensions 1 and 2)
+#' XX1=res.mgPCA$Similarity.noncum.Common.Group.load[[1]][-1, 1]
+#' XX2=res.mgPCA$Similarity.noncum.Common.Group.load[[2]][-1, 1]
+#' simil <- cbind(XX1, XX2)
+#' YLAB = paste("Dim1, %",res.mgPCA$noncumper.inertiglobal[2])
+#' plot(simil, xlab=XLAB, ylab=YLAB, main="Similarity between groups and common structure", pch=20)
+#' text(simil, labels=rownames(simil), cex=1, font.lab=1, pos=3)
+#' #------------------
+#' loadingsplot(res.mgPCA, axes=c(1,2), INERTIE=res.mgPCA$noncumper.inertiglobal)
 #' scoreplot(res.mgPCA, axes=c(1,2))
 mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
 
 
-  
   #=========================================================================
   #                             1. Checking the inputs
   #=========================================================================
@@ -136,11 +155,11 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
   rownames(res$cumper.inertigroup)=levels(Group)
   colnames(res$cumper.inertigroup)=paste("Dim", 1:ncomp, sep="")
   
-  res$cumper.inertiglobal=matrix(0, ncol=ncomp,nrow=1)
+  res$cumper.inertiglobal=matrix(0, ncol=ncomp, nrow=1)
   colnames(res$cumper.inertiglobal)=paste("Dim", 1:ncomp, sep="")
   
-  res$noncumper.inertiglobal=matrix(0, ncol=ncomp,nrow=1)
-  colnames(res$noncumper.inertiglobal)=paste("Dim", 1:ncomp, sep="")
+  res$noncumper.inertiglobal = matrix(0, ncol=ncomp, nrow=1)
+  colnames(res$noncumper.inertiglobal) = paste("Dim", 1:ncomp, sep="")
   #=========================================================================
   #                          4. NIPALS for multi_group CPCA
   #=========================================================================
@@ -185,7 +204,6 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
       w.common = normv(w.common)
       
       
-      
       # 4.2.3  criterion  
       iNIPALS=iNIPALS+1
       Crit=0
@@ -200,8 +218,6 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
       if (iNIPALS>1){
         threshold=critt[iNIPALS]-critt[(iNIPALS-1)]
       }
-      
-      
       res$loadings.common[,h]=w.common
            
     } # end of iteration
@@ -214,16 +230,14 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
       projet.data.group=project.group %*% res$split.Data[[m]]
       res$cumper.inertigroup[m,h]=100*sum(diag(t(projet.data.group) %*% projet.data.group))/ sum(diag(t(res$split.Data[[m]]) %*% res$split.Data[[m]]))
     }
-    
-    
+ 
     project.global=res$score.Global[,1:h] %*% ginv( t(res$score.Global[,1:h]) %*% res$score.Global[,1:h]) %*%   t(res$score.Global[,1:h])
     projet.data.global=project.global%*% res$Con.Data
     res$cumper.inertiglobal[h]=100*sum(diag(t(projet.data.global) %*% projet.data.global))/ sum(diag(t(res$Con.Data) %*% res$Con.Data))
     
     projectn.global=res$score.Global[,h] %*% ginv( t(res$score.Global[,h]) %*% res$score.Global[,h]) %*%   t(res$score.Global[,h])
-    projetn.data.global=projectn.global%*% res$Con.Data
-    res$noncumper.inertiglobal[h]=100*sum(diag(t(projetn.data.global) %*% projetn.data.global))/ sum(diag(t(res$Con.Data) %*%res$Con.Data))
-    
+    projetn.data.global=projectn.global %*% res$Con.Data
+    res$noncumper.inertiglobal[h] = round(100*sum(diag(t(projetn.data.global) %*% projetn.data.global))/ sum(diag(t(res$Con.Data) %*%res$Con.Data)),1)
     #=========================================================================
     #                                   Deflation 
     #=========================================================================
@@ -235,7 +249,6 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
       split.Data[[m]] = matrix(split.Data[[m]],ncol=P)
       colnames(split.Data[[m]]) = colnames(Con.Data)
     }
-    
     
   }  #------ END OF DIMENSION
   
@@ -254,8 +267,6 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
   res$exp.var = exp.var
   rownames(res$exp.var) = levels(Group)
   colnames(res$exp.var) = paste("Dim", 1:ncomp, sep="")
-    
-  
   ##----------------------------------------------------------------------------
   ##  		       Similarity between partial and common loadings 
   ##----------------------------------------------------------------------------
@@ -268,8 +279,7 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
   
   Similarity =similarity_function(loadings_matrices=loadings_matrices, NAMES)
   Similarity_noncum = similarity_noncum(loadings_matrices=loadings_matrices, NAMES)
-  
-  
+
   res$Similarity.Common.Group.load          = Similarity
   res$Similarity.noncum.Common.Group.load   = Similarity_noncum
   #--------------------------------------
@@ -279,7 +289,6 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
   class(res) = c("mgpca", "mg")
   return(res)
 }
-
 
 #' @S3method print mgpca
 print.mgpca <- function(x, ...)

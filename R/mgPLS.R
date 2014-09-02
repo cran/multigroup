@@ -40,44 +40,54 @@
 #' DataY = oliveoil[,7:12]
 #' Group = as.factor(oliveoil[,1])
 #' res.mgPLS = mgPLS (DataX, DataY, Group)
+#' barplot(res.mgPLS$noncumper.inertiglobal)
+#' #----- Regression coefficients 
+#' #res.mgPLS$coefficients[[2]]
+#' #----- Similarity index: group loadings are compared to the common structure (in  X and Y spaces)
+#' XX1= res.mgPLS$Similarity.noncum.Common.Group.load$X[[1]][-1, 1, drop=FALSE]
+#' XX2=res.mgPLS$Similarity.noncum.Common.Group.load$X[[2]][-1, 1, drop=FALSE]
+#' simX <- cbind(XX1, XX2)
+#' YY1=res.mgPLS$Similarity.noncum.Common.Group.load$Y[[1]][-1, 1, drop=FALSE]
+#' YY2=res.mgPLS$Similarity.noncum.Common.Group.load$Y[[2]][-1, 1, drop=FALSE]
+#' simY <- cbind(YY1,YY2)
+#' XLAB = paste("Dim1, %",res.mgPLS$noncumper.inertiglobal[1])
+#' YLAB = paste("Dim1, %",res.mgPLS$noncumper.inertiglobal[2])
+#' plot(simX[, 1], simX[, 2], pch=15, xlim=c(0, 1), ylim=c(0, 1), main="Similarity indices in X space", 
+#'      xlab=XLAB, ylab=YLAB)
+#' abline(h=seq(0, 1, by=0.2), col="black", lty=3)
+#' text(simX[, 1], simX[, 2], labels=rownames(simX), pos=2)
+#' plot(simY[, 1], simY[, 2], pch=15, xlim=c(0, 1), ylim=c(0, 1), main="Similarity indices in Y space",
+#'      xlab=XLAB, ylab=YLAB)
+#' abline(h=seq(0, 1, by=0.2), col="black", lty=3)
+#' text(simY[, 1], simY[, 2], labels=rownames(simY), pos=2)
 mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gscale=FALSE){
   #=========================================================================
-  #                             1. Checking the inputs
+  #                               Checking the inputs
   #=========================================================================
   check(DataX, Group)
   check(DataY, Group)
   
   if ((nrow(DataX) != nrow(DataY))) 
     stop("Oops unequal number of rows in 'DataX' and 'DataY'.")
-  
-  
-  
   #=========================================================================
-  #                              2. preparing Data
+  #                               Preparing Data
   #=========================================================================
   if (class(DataX) == 'data.frame') {
     DataX = as.matrix(DataX)
   }
-  
   if (class(DataY) == 'data.frame') {
     DataY = as.matrix(DataY)
   }
-  
-  
   if(is.null(ncomp)) {ncomp = 2}
-  
   if(is.null(colnames(DataX))) {
     colnames(DataX) = paste('VX', 1:ncol(DataX), sep='')
   }
-  
   if(is.null(colnames(DataY))) {
     colnames(DataY) = paste('VY', 1:ncol(DataY), sep='')
   }
-  
-  
-  #---------------------------------------------------------------------------
+  #=========================================================================
   #                        Notations and Presentation of Data
-  #---------------------------------------------------------------------------
+  #=========================================================================
   DataX = as.data.frame(DataX, row.names = NULL)
   DataY = as.data.frame(DataY, row.names = NULL)
   Group = as.factor(Group)
@@ -91,18 +101,18 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   n = as.vector(table(Group))    #---- number of individuals in each group
   N = sum(n)                     #---- number of individuals
   H = ncomp
-  ##---------------------------------------------------------------------------
-  ##					 Pre-processing of data
-  ##---------------------------------------------------------------------------
-  ##------------------------ Global cenetring and scaling ----------------------
+  #=========================================================================
+  #					                       Pre-processing 
+  #=========================================================================
+  #------------------------ Global cenetring and scaling -------------------
   DataX = scale(DataX, center = Gcenter, scale = Gscale) 
   DataY = scale(DataY, center = Gcenter, scale = Gscale)
-  #--------------------------------------  Split Data and save them in function
+  #-----------------------------------  Split Data and save them in function
   DataXm = split(DataX, Group)         #----split Data to M parts 
   DataYm = split(DataY, Group)         #----split Data to M parts 
   Concat.X = Concat.Y = NULL
   
-  # centering and scaling if TRUE
+  # Centering and scaling if TRUE
   for(m in 1:M){  
     DataXm[[m]] = matrix(DataXm[[m]], nrow=n[m])
     DataXm[[m]] = scale(DataXm[[m]], center=TRUE, scale=Scale)
@@ -117,15 +127,12 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   colnames(Concat.Y) = colnames(DataY)
   rownames(Concat.X) = rownames(DataX)
   rownames(Concat.Y) = rownames(DataY)
-  
-  #---------------------------------------------------------------------------
-  #					    OUTPUT
-  #---------------------------------------------------------------------------
+  #=========================================================================
+  #					                         Output
+  #=========================================================================
   res =  list()
-  
   res$DataXm =  DataXm
   res$DataYm =  DataYm
-  
   res$Concat.X = Concat.X
   res$Concat.Y = Concat.Y
   #------------------------ 
@@ -158,9 +165,12 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   exp_var = c(0)
   nor2y= sum((Concat.Y)^2)
   exp_vary = c(0)
-  #---------------------------------------------------------------------------
-  #                      NIPALS for TWO-BLOCK MULTI-GROUP
-  #---------------------------------------------------------------------------
+  #------------------------
+  res$noncumper.inertiglobal = matrix(0, ncol=ncomp, nrow=1)
+  colnames(res$noncumper.inertiglobal) = paste("Dim", 1:ncomp, sep="")
+  #=========================================================================
+  #                      NIPALS algorithm for multigroup PLS data
+  #=========================================================================
   for(h in 1:H){
     eps = 1e-6     # for iteration loops
     #w= svd(t(Concat.X) %*% Concat.Y) $u[,1] # initial value of w
@@ -173,14 +183,14 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     uTold=0;
     vTold=0;
     iter =0;
-    covv = 0   # criterion for each iteration
-    covvm = 0  # criterion for each iteration
+    covv  = 0   # criterion for each iteration
+    covvm = 0   # criterion for each iteration
     tt = matrix(0,nrow=N)
     tmm = list()
     umm = list()
     #-------------------------------   
     while (x>eps){
-      # ------- compute loading/ components vector associated to Y ---------------
+      # ------- compute loading/ components vector associated to Y -----------
       # loading associated to Y
       sumyx=0
       
@@ -196,8 +206,8 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
         um = DataYm[[m]] %*% v        # score of group m
         umm[[m]]=um
       }
-      u    <- (Concat.Y) %*% v  
-      # -------------- components and loading vectors asosciated to X--------------
+      u    = (Concat.Y) %*% v  
+      # ------------ components and loading vectors asosciated to X -----------
       # update the loading vector associates to X
       #---------------------------- w
       sumxy=0
@@ -221,7 +231,7 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
       }
       t = (Concat.X) %*% w 
       tt = cbind(tt,t)
-      #---------------------------- # test accuracy (on the normalized) T and P 
+      #------------# test accuracy (on the normalized) T and P 
       #-------------check convergence -------------- 
       iter=iter+1
       if (iter > 1){
@@ -249,9 +259,12 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     bCommonY[,h] = v
     COV[[h]] = covv
     COVm[[h]]=covvm
-    #---------------------------------------------------------------------------
-    #                      computation of regression coefficients 
-    #---------------------------------------------------------------------------
+    project.global=TGlobalX[,h] %*% ginv( t(TGlobalX[,h]) %*% TGlobalX[,h]) %*%   t(TGlobalX[,h])
+    project.data.global=project.global %*% res$Concat.X 
+    res$noncumper.inertiglobal[h] = round(100*sum(diag(t(project.data.global) %*% project.data.global))/ sum(diag(t(res$Concat.X) %*% res$Concat.X)),1)
+    #=========================================================================
+    #                      Computation of regression coefficients 
+    #=========================================================================
     ppbeta[,h] = t(res$Concat.X)%*% TGlobalX[,h]/(c(( t(TGlobalX[,h])%*% TGlobalX[,h])))
     if(h==1){aCommonX_STAR[, h]=aCommonX[,h]}
     if(h>=2){
@@ -269,9 +282,9 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     res$coefficients[[h]] = as.matrix(aCommonX_STAR[,1:h]) %*% (betay[[h]])
     colnames(res$coefficients[[h]]) = colnames(Concat.Y)
     rownames(res$coefficients[[h]]) = colnames(Concat.X)
-    #---------------------------------------------------------------------------
-    #                                   deflation 
-    #---------------------------------------------------------------------------
+    #=========================================================================
+    #                                   Deflation 
+    #=========================================================================
     wp = crossprod(Concat.X, t) / drop(crossprod(t))
     wy = crossprod(Concat.Y, t) / drop(crossprod(t))
     Concat.X = Concat.X -  t%*% t(wp)
@@ -283,7 +296,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   
     exp_var_newy= 100* as.numeric(t(t) %*% res$Concat.Y %*% t(res$Concat.Y) %*% t/ as.vector((t(t)%*%t)) )/nor2y
     exp_vary=append(exp_vary, exp_var_newy)
-  
     #---------------------------------- #Split Data
     DataXm = split(Concat.X, Group)  
     DataYm = split(Concat.Y, Group)
@@ -297,10 +309,9 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     }
     #-----------------------
   }  # END OF DIMENSION
-  
-  #---------------------------------------------------------------------------
-  #                                   OUTPUT
-  #---------------------------------------------------------------------------
+  #=========================================================================
+  #                                  Saving outputs
+  #=========================================================================
   expvarX = exp_var[-1]
   cumexpvarX = cumsum(expvarX)
 
@@ -314,7 +325,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   EVY = matrix(c(expvarY, cumexpvarY), ncol=2)
   rownames(EVY) = paste("Dim", 1:H, sep="")
   colnames(EVY) = c("Explained.Var", "Cumulative") 
-  
   #------------------------
   for(m in 1:M){ 
     for(h in 1:H){ 
@@ -322,26 +332,20 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
       proj=  TGroupX[[m]][,1:h] %*%  ginv(t(TGroupX[[m]][,1:h]) %*% TGroupX[[m]][,1:h])  %*% t(TGroupX[[m]][,1:h]) 
       xm_hat= proj %*%  DataXm[[m]]
       explain_varx=sum(diag( xm_hat %*% t(xm_hat) ))/sum(diag( DataXm[[m]] %*% t(DataXm[[m]]) ))
-      
       ym_hat= proj %*%  DataYm[[m]]
       explain_vary = sum(diag( ym_hat %*% t(ym_hat) ))/sum(diag( DataYm[[m]] %*% t(DataYm[[m]]) ))
-      
-      
       cum.expvar.Xm[m,h] = explain_varx
       cum.expvar.Ym[m,h] = explain_vary
     }
   }
-  
   #------------------------
-  
-  # C
+  # Y coefficients
   res$coefficients.Y <- t(coefficients(lm(Concat.Y ~ TGlobalX - 1)))
   rownames(res$coefficients.Y) = colnames(res$Concat.Y)
   colnames(res$coefficients.Y) = paste("Dim", 1:H, sep="")
-  
-  ##----------------------------------------------------------------------------
-  ##			       Similarity between partial and common loadings 
-  ##----------------------------------------------------------------------------
+  #=========================================================================
+  #			       Similarity between group and common loadings 
+  #=========================================================================
   loadings_matricesW = list()
   loadings_matricesW[[1]] = aCommonX
   for(m in 2:(M+1)){
@@ -354,10 +358,8 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     loadings_matricesV[[m]] = bGroupY[[(m-1)]]
   }
   NAMES = c("Commonload", levels(Group))
-    
   similarityA =similarity_function(loadings_matrices=loadings_matricesW, NAMES)
   similarityB =similarity_function(loadings_matrices=loadings_matricesV, NAMES)
-  
   similarityA_noncum = similarity_noncum(loadings_matrices=loadings_matricesW, NAMES)
   similarityB_noncum = similarity_noncum(loadings_matrices=loadings_matricesV, NAMES)
   #------------------------------------------------------------------
@@ -365,7 +367,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   rownames(bCommonY) = colnames(res$Concat.Y)
   rownames(TGlobalX) = rownames(res$Concat.X)
   rownames(UGlobalY) = rownames(res$Concat.Y)
-  
   colnames(aCommonX) = paste("Dim", 1:H, sep="")
   colnames(bCommonY) = paste("Dim", 1:H, sep="")
   colnames(TGlobalX) = paste("Dim", 1:H, sep="")
@@ -374,14 +375,10 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   for(m in 1: M){
     colnames(TGroupX[[m]]) = paste("Dim", 1:H, sep="")
   }
-  
-  
   res$Components.Global  = list(X = TGlobalX, Y = UGlobalY)
   res$Components.Group   = list(X = TGroupX)
   res$loadings.common    = list(X = aCommonX, Y = bCommonY)
   res$loadings.Group     = list(X = aGroupX, Y = bGroupY)
-  
-  
   colnames(cum.expvar.Xm) = paste("Dim", 1:H, sep="")
   colnames(cum.expvar.Ym) = paste("Dim", 1:H, sep="")
   rownames(cum.expvar.Xm) = levels(Group)
@@ -392,9 +389,8 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   
   res$Similarity.Common.Group.load          = list(X = similarityA, Y = similarityB)
   res$Similarity.noncum.Common.Group.load   = list(X = similarityA_noncum , Y = similarityB_noncum)
-  #------------------------------------------------------------------
+  #----------------------------------
   class(res) = c("mgPLS", "mg")
-  
   return(res)
 }
 

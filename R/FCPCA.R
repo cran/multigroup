@@ -15,7 +15,7 @@
 #' @return \item{loadings.common}{Matrix of common loadings}
 #' @return \item{lambda}{The specific variances of group}
 #' @return \item{exp.var}{Percentages of total variance recovered associated with each dimension }
-#' @seealso \code{\link{mgPCA}}, \code{\link{DGPA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, code{\link{BGC}}, code{\link{summarize}}, code{\link{TBWvariance}}, \code{\link{loadingsplot}}, \code{\link{scoreplot}}, \code{\link{iris}}  
+#' @seealso \code{\link{mgPCA}}, \code{\link{DGPA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{BGC}}, \code{\link{summarize}}, \code{\link{TBWvariance}}, \code{\link{loadingsplot}}, \code{\link{scoreplot}}, \code{\link{iris}}  
 #' @export
 #' @references B. N. Flury (1984). Common principal components in k groups.
 #'  \emph{Journal of the American Statistical Association}, 79, 892-898.
