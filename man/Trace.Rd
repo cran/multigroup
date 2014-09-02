@@ -2,13 +2,13 @@
 \alias{Trace}
 \title{trace of a matrix}
 \usage{
-Trace(X)
+  Trace(X)
 }
 \arguments{
   \item{x}{a numeric vector}
 }
 \description{
-To calculate trace
+  To calculate trace
 }
 \keyword{internal}
 

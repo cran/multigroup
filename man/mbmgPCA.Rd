@@ -2,9 +2,9 @@
 \alias{mbmgPCA}
 \title{multiblock and multigroup PCA}
 \usage{
-mbmgPCA(Data, Group, nBlock, Block.name = NULL, ncomp = NULL,
-  niter = NULL, ScaleGroup = FALSE, ScaleDataA = FALSE,
-  ScaleDataB = FALSE, norm = FALSE)
+  mbmgPCA(Data, Group, nBlock, Block.name = NULL,
+    ncomp = NULL, niter = NULL, ScaleGroup = FALSE,
+    ScaleDataA = FALSE, ScaleDataB = FALSE, norm = FALSE)
 }
 \arguments{
   \item{Data}{a numeric (quantitative) matrix or data
@@ -36,52 +36,54 @@ mbmgPCA(Data, Group, nBlock, Block.name = NULL, ncomp = NULL,
   \item{norm}{normalize each block, by defalt is FALSE}
 }
 \value{
-list with the following results:
+  list with the following results:
 
-\item{K.Data}{Block data}
+  \item{K.Data}{Block data}
 
-\item{concat.Data}{Concatenated data}
+  \item{concat.Data}{Concatenated data}
 
-\item{concat.block.Data}{Block concatenated data}
+  \item{concat.block.Data}{Block concatenated data}
 
-\item{res.iter}{Result of iteration}
+  \item{res.iter}{Result of iteration}
 
-\item{CRIT.h}{Maximization criterion for each diemnsion}
+  \item{CRIT.h}{Maximization criterion for each diemnsion}
 
-\item{CRIT}{Maximization criterion}
+  \item{CRIT}{Maximization criterion}
 
-\item{crit.group}{Maximization criterion associated with
-each group}
+  \item{crit.group}{Maximization criterion associated with
+  each group}
 
-\item{crit.block}{Maximization criterion associated with
-each block}
+  \item{crit.block}{Maximization criterion associated with
+  each block}
 
-\item{omega}{Weight of each block in construction of common
-scores}
+  \item{omega}{Weight of each block in construction of
+  common scores}
 
-\item{block.common.loading}{Common loadings for each block}
+  \item{block.common.loading}{Common loadings for each
+  block}
 
-\item{block.group.loadings}{Partial loadings for each block
-and group}
+  \item{block.group.loadings}{Partial loadings for each
+  block and group}
 
-\item{similarity}{Similarity among common and partial
-loadings for each block}
+  \item{similarity}{Similarity among common and partial
+  loadings for each block}
 
-\item{global.scores}{Global scores among blocks}
+  \item{global.scores}{Global scores among blocks}
 
-\item{block.scores}{Scores for each block}
+  \item{block.scores}{Scores for each block}
 
-\item{block.group.scores}{Scores for each block and group}
+  \item{block.group.scores}{Scores for each block and
+  group}
 
-\item{block.scores}{Scores for each block}
+  \item{block.scores}{Scores for each block}
 
-\item{global.expvar}{Global explained variance}
+  \item{global.expvar}{Global explained variance}
 
-\item{cum.exp.var.block.group}{Cumulative explained
-variance for each block and group}
+  \item{cum.exp.var.block.group}{Cumulative explained
+  variance for each block and group}
 }
 \description{
-multiblock and multigroup PCA (mbmgPCA)
+  multiblock and multigroup PCA (mbmgPCA)
 }
 \examples{
 data(wine)
@@ -93,12 +95,12 @@ BlockNames    <- c("Olfaction at rest", "Vision", "Olfaction  after shaking", "T
 res = mbmgPCA(Data = WineData, Group, nBlock , ncomp=5)
 }
 \references{
-A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard, Under
-Review. Multivariate data analysis of multi-groups
-datasets. Application to sensory analysis, \emph{Chemolab},
-25, 108-123.
+  A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard,
+  Under Review. Multivariate data analysis of multi-groups
+  datasets. Application to sensory analysis,
+  \emph{Chemolab}, 25, 108-123.
 }
 \seealso{
-\code{\link{mgPCA}}
+  \code{\link{mgPCA}}
 }
 

@@ -22,6 +22,8 @@
 #' @return \item{noncumper.inertiglobal}{     Percentage of global component inertia}
 #' @return \item{lambda}{     The specific variances of groups}
 #' @return \item{exp.var}{      Percentages of total variance recovered associated with each dimension }
+#' @return \item{Similarity.Common.Group.load}{Cumulative similarity between group and common loadings}
+#' @return \item{Similarity.noncum.Common.Group.load}{ NonCumulative  similarity between group and common loadings}
 #' @seealso \code{\link{BGC}}, \code{\link{FCPCA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{DGPA}}, \code{\link{summarize}}, \code{\link{TBWvariance}}, \code{\link{loadingsplot}}, \code{\link{scoreplot}}, \code{\link{iris}}  
 #' @export
 #' 
@@ -39,11 +41,11 @@
 #' @examples
 #' Data = iris[,-5]
 #' Group = iris[,5]
-#' res.mgPCA = mgPCA (Data, Group, graph=TRUE)
+#' res.mgPCA = mgPCA (Data, Group)
 #' loadingsplot(res.mgPCA, axes=c(1,2))
 #' scoreplot(res.mgPCA, axes=c(1,2))
 mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
-  require(MASS)
+
 
   
   #=========================================================================
@@ -169,8 +171,8 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
         t.global=rbind(t.global,t.group)
         
         w.group=t(split.Data[[m]])%*%t.group             # group loadings
-        res$loadings.group[[m]][,h]=w.group
-        W[m,]=w.group                                # combined group loadings
+        res$loadings.group[[m]][,h]= normv(w.group)      #w.group
+        W[m,] = w.group                                # combined group loadings
       }
       
       res$score.Global[,h]= Con.Data %*% w.common   
@@ -254,6 +256,23 @@ mgPCA <- function(Data, Group, ncomp=NULL, Scale=FALSE, graph=FALSE){
   colnames(res$exp.var) = paste("Dim", 1:ncomp, sep="")
     
   
+  ##----------------------------------------------------------------------------
+  ##  		       Similarity between partial and common loadings 
+  ##----------------------------------------------------------------------------
+  loadings_matrices = list()
+  loadings_matrices[[1]] = res$loadings.common
+  for(m in 2:(M+1)){
+    loadings_matrices[[m]] = res$loadings.group[[(m-1)]]
+  }
+  NAMES = c("Commonload", levels(Group))
+  
+  Similarity =similarity_function(loadings_matrices=loadings_matrices, NAMES)
+  Similarity_noncum = similarity_noncum(loadings_matrices=loadings_matrices, NAMES)
+  
+  
+  res$Similarity.Common.Group.load          = Similarity
+  res$Similarity.noncum.Common.Group.load   = Similarity_noncum
+  #--------------------------------------
   if(graph) {plot.mg(res)}
   
   # add class

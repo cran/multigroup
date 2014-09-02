@@ -51,7 +51,6 @@
 mbmgPCA <- function(Data, Group, nBlock, Block.name=NULL, ncomp=NULL, niter=NULL, ScaleGroup=FALSE, ScaleDataA=FALSE, 
                     ScaleDataB=FALSE, norm=FALSE){
   
-  require(MASS)
   #============================================================================
   #                              Checking inputs
   #============================================================================

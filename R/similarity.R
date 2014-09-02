@@ -18,11 +18,11 @@ similarity_function<-function(loadings_matrices, NAMES){
         for(i in 1:h){
           cc=cc+abs(as.numeric(t(loadings_matrices[[aa]][,i]) %*% loadings_matrices[[bb]][,i]))
         }
-        MM[aa,bb]=cc
-        MM[bb,aa]=MM[aa,bb]
+        MM[aa,bb] = cc
+        MM[bb,aa] = MM[aa,bb]
       }
     }
-    MM=MM/h
+    MM = MM/h
     
     
     colnames(MM)= NAMES

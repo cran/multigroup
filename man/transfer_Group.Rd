@@ -2,7 +2,7 @@
 \alias{transfer_Group}
 \title{Transter function}
 \usage{
-transfer_Group(Data, Group)
+  transfer_Group(Data, Group)
 }
 \arguments{
   \item{Data}{a numeric (quantitative) matrix or data
@@ -12,15 +12,15 @@ transfer_Group(Data, Group)
   structure}
 }
 \value{
-list with the following results:
+  list with the following results:
 
-\item{Data.group}{original data}
+  \item{Data.group}{original data}
 }
 \description{
-Transfer data to M groups of individuals
+  Transfer data to M groups of individuals
 }
 \seealso{
-\code{\link{split}}, \code{\link{iris}}
+  \code{\link{split}}, \code{\link{iris}}
 }
 \keyword{internal}
 

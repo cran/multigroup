@@ -315,8 +315,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   rownames(EVY) = paste("Dim", 1:H, sep="")
   colnames(EVY) = c("Explained.Var", "Cumulative") 
   
-  #--------------------------------------------------
-  library(MASS)
   #------------------------
   for(m in 1:M){ 
     for(h in 1:H){ 

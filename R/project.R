@@ -4,8 +4,8 @@
 #' @param x a numeric vector
 #' @export
 #' @keywords internal
-project <- function(X){
-  
+project <- function(X) {
+  # projection
   Y = X %*% ginv(t(X) %*% X) %*% t(X)
 }
 
