@@ -16,7 +16,7 @@
 #' Group = as.factor(oliveoil[,1])
 #' res.mgPLS = mgPLS (DataX, DataY, Group)
 #' X=res.mgPLS$loadings.commo$X; Y=res.mgPLS$loadings.commo$Y
-#' loadingsplotXY(X, Y, axes=c(1,2), INERTIE=noncumper.inertiglobal)
+#' loadingsplotXY(X, Y, axes=c(1,2), INERTIE=res.mgPLS$noncumper.inertiglobal)
 loadingsplotXY <- function(X, Y,  axes=c(1,2), INERTIE=NULL, cex=NULL, font.lab= NULL){
   
   
@@ -26,7 +26,7 @@ loadingsplotXY <- function(X, Y,  axes=c(1,2), INERTIE=NULL, cex=NULL, font.lab=
   if (max(axes)>ncol(Y))
     stop("\nOops one of the axes value is greater than number of existing dimensions")
   
-    
+  
   if(is.null(rownames(X))) {
     rownames(X) = paste('X', 1:nrow(X), sep='')
   }
@@ -35,7 +35,7 @@ loadingsplotXY <- function(X, Y,  axes=c(1,2), INERTIE=NULL, cex=NULL, font.lab=
   if(is.null(rownames(Y))) {
     rownames(Y) = paste('Y', 1:nrow(Y), sep='')
   }
-
+  
   
   AA = rbind(X[,axes],Y[,axes])
   P  = nrow(X)
@@ -52,8 +52,23 @@ loadingsplotXY <- function(X, Y,  axes=c(1,2), INERTIE=NULL, cex=NULL, font.lab=
   maxlimx   <- max(c(w1,w2))
   lim =c(minlimx   ,maxlimx   )
   
+  #-----------------------
+  xax=axes[1]
+  yax=axes[2]
   
-  plot(w1, w2, type="n", ylim=lim ,xlim=lim ,xlab = "", ylab = "")
+  
+  Dim11 = paste("Dim ", axes[1], sep = "")
+  Dim21 = paste("Dim ", axes[2], sep = "")
+  
+  
+  Dim12 = paste(Dim11, INERTIE[axes[1]], sep =" (")
+  Dim22 = paste(Dim21, INERTIE[axes[2]], sep =" (")
+  
+  lab.x = paste(Dim12, "%)", sep="")
+  lab.y = paste(Dim22, "%)", sep="")
+  #------------------------
+  
+  plot(w1, w2, type="n", ylim=lim ,xlim=lim ,xlab = lab.x, ylab = lab.y)
   abline(h = 0, v = 0, , col= "gray60")
   arrows(vv, uu, w1, w2,lwd=2,length=.2, lty=c(rep(1,P)), col=rep(c(1,2),c(P,Q)))
   www = cbind(w1,w2)

@@ -1,4 +1,4 @@
-#' @title  multiblock and multigroup PCA
+#' @title  multiblock and multigroup Principal Component Analysis
 #' 
 #' @description 
 #'  multiblock and multigroup PCA (mbmgPCA)

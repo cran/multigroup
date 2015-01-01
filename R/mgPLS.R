@@ -147,9 +147,18 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   for(m in 1:M){
     aGroupX[[m]] = matrix(0,nrow=P, ncol=H)
     bGroupY[[m]] = matrix(0,nrow=Q, ncol=H)
+    rownames(aGroupX[[m]]) = colnames(DataX)
+    colnames(aGroupX[[m]]) = paste("Dim", 1:H, sep="")
+    rownames(bGroupY[[m]]) = colnames(DataY)
+    colnames(bGroupY[[m]]) = paste("Dim", 1:H, sep="")
+    
+    
     TGroupX[[m]] = matrix(0,nrow=n[m],ncol=H)
     UGroupY[[m]] = matrix(0,nrow=n[m],ncol=H)
   }
+  
+  
+
   #------------------------ 
   aCommonX_STAR = matrix(0,nrow=P,ncol=H)
   COV  = vector("list",H)
@@ -275,7 +284,7 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
       }
       aCommonX_STAR[, h] <- Mat %*% aCommonX[, h]
     }
-    dd = coefficients(lm(Concat.Y ~TGlobalX[,1:h]))
+    dd = coefficients(lm(res$Concat.Y ~TGlobalX[,1:h]))
     if(Q==1){betay[[h]]=(dd[-1])}
     if(Q>=2){betay[[h]]=(dd[-1,])}
     #res$BETA[[h]]=as.matrix(aCommonX_STAR[,1:h]) %*% (betay[[h]])
