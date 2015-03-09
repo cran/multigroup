@@ -1,4 +1,4 @@
-3e2b6206a4cf1263230d6fc1e7389a24 *DESCRIPTION
+62d66e1802c9b975f20cc63742cb5dd6 *DESCRIPTION
 b6d3586b378c89f097cc2b36e6c92d7f *NAMESPACE
 4023eb5f03515c1dd914246f5b37e68c *R/BGC.R
 c67047dbf7705cb8da7866db416d323a *R/DCCSWA.R
@@ -15,7 +15,7 @@ ca6834aaebbaa9ac0db9bbbf6d26a7e7 *R/check.R
 4e6243b8a8626f84065ec3bfa08f3ddd *R/loadingsplotXY.R
 de0ad9e2c6d2e36cf1569b596012587d *R/mbmgPCA.R
 47bcd55953b267cf87afe0dad8251f02 *R/mgPCA.R
-ec8d335a30b2d0b07d50ad3fdf7252bd *R/mgPLS.R
+cd27f01a97c4e087e8cbf149917da344 *R/mgPLS.R
 9ebf0887989363c5aeefea34245f6102 *R/multigroup.R
 b4b930bb2a83b8e4a244b39af425e936 *R/normM.R
 eb5b71e787bdac618d587d3bd8cc599e *R/normv.R
@@ -42,7 +42,7 @@ f18cb3b965802b5a4f7ea688026da3d4 *man/deflation.Rd
 5eb60ffbca170d8f424f3e4fd09b9c22 *man/loadingsplotXY.Rd
 0c348d03f5bdd05eb70685ce8d6c5632 *man/mbmgPCA.Rd
 2c173e9752ea30d492bd684622f43f92 *man/mgPCA.Rd
-b09559e2d0d87e7a18fe2353169195fb *man/mgPLS.Rd
+b10d3cd6e81727227433f4c8df86fa4f *man/mgPLS.Rd
 fc930ad4eb7313627fe4f1b8e3839035 *man/multigroup.Rd
 7127c0dfbe22891b24ef4a9cddc02895 *man/normM.Rd
 374add1591f5ee04a36ca663755ecad5 *man/normv.Rd

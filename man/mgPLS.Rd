@@ -39,7 +39,7 @@ list with the following results:
 
 \item{Components.Global}{Conctenated Components for X and Y}
 
-\item{Components.Group}{Components associated with groups in X and Y}
+\item{Components.Group}{Components associated with groups in X}
 
 \item{loadings.common}{Common vector of loadings for X and Y}
 
@@ -52,6 +52,10 @@ list with the following results:
 \item{Similarity.Common.Group.load}{Cumulative similarity between group and common loadings}
 
 \item{Similarity.noncum.Common.Group.load}{ NonCumulative  similarity between group and common loadings}
+
+\item{eigenValue}{EigenValue to calculate the percentage of inertia}
+
+\item{Percentage.inertia.per.GroupX}{Percentages of inertia per group X}
 }
 \description{
 Multigroup PLS regression
