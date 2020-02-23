@@ -36,10 +36,10 @@
 #' @return \item{cum.exp.var.block.group}{Cumulative explained variance for each block and group}
 #' @seealso \code{\link{mgPCA}} 
 #' @export
-#' @references A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard, Under Review. Multivariate data analysis of multi-groups datasets. Application to sensory analysis,
-#'  \emph{Chemolab}, 25, 108-123.
+#' @references A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard, 2014. Multivariate analysis of multiblock and multigroup data,
+#'  \emph{Chemometrics and Intelligent Laboratory Systems}, 133, 63-69.
 #' 
-#'     
+#'
 #' @examples
 #' data(wine)
 #' Select=c(which(wine[,2]=="Env1"),which(wine[,2]=="Env2"),which(wine[,2]=="Reference"))
@@ -47,7 +47,7 @@
 #' Group <- as.factor(c(rep("Env1",7), rep("Env2",5), rep("Reference",7)))
 #' nBlock <- c(5, 3, 10, 9)
 #' BlockNames    <- c("Olfaction at rest", "Vision", "Olfaction  after shaking", "Taste")
-#' res = mbmgPCA(Data = WineData, Group, nBlock , ncomp=5)
+#' res = mbmgPCA(Data = WineData, Group, nBlock , Block.name=BlockNames, ncomp=5) 
 mbmgPCA <- function(Data, Group, nBlock, Block.name=NULL, ncomp=NULL, niter=NULL, ScaleGroup=FALSE, ScaleDataA=FALSE, 
                     ScaleDataB=FALSE, norm=FALSE){
   
@@ -73,7 +73,7 @@ mbmgPCA <- function(Data, Group, nBlock, Block.name=NULL, ncomp=NULL, niter=NULL
     stop("\nGroups must have more than one level") 
   
   
-  if (class(Data) == 'data.frame') {
+  if (is.data.frame(Data) == TRUE) {
     Data = as.matrix(Data)
   }
   

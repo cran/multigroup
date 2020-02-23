@@ -6,6 +6,7 @@
 #' @param font.lab type of font by default 3
 #' @param \dots Further arguments are ignored
 #' @return loadings and scores plots
+#' @importFrom grDevices dev.new hcl
 #' @S3method plot mg
 #' @method plot mg
 plot.mg <- function(x, axes=c(1,2), cex=NULL, font.lab= NULL, ...){

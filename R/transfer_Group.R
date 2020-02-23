@@ -11,9 +11,11 @@
 #' @keywords internal
 transfer_Group = function(Data, Group){
    
-  if (class(Data) == 'data.frame') {
-    Data = as.matrix(Data)
-  }
+ if (is.data.frame(Data) == TRUE) {
+     Data = as.matrix(Data)
+   }
+  
+  
   rownames(Data) = Group                 #---- rownames of data=groups
   M = length(levels(Group))
   P = dim(Data)[2]
@@ -33,8 +35,9 @@ transfer_Group = function(Data, Group){
   
   for(m in 1:M){  # dataset in form of matrix
     
-    if(class(Xm[[m]])!="data.frame"){
-      Xm[[m]] = matrix(Xm[[m]], ncol=P)}
+    #if(class(Xm[[m]])!="data.frame"){
+      Xm[[m]] = matrix(Xm[[m]], ncol=P)
+      #}
     colnames(Xm[[m]]) = colnames(Data)
     rownames(Xm[[m]]) = grouprname[[m]]
   }

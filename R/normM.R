@@ -9,7 +9,7 @@
 #' @keywords internal
 normM <- function(X){
   
-  if (class(X) == 'data.frame') {
+  if (is.data.frame(X) == TRUE) {
     X = as.matrix(X)
   }
   

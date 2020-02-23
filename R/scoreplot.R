@@ -5,6 +5,7 @@
 #' @param cex character expansion for text by default .85
 #' @param font.lab type of font by default 3
 #' @return score plot
+#' @importFrom grDevices hcl
 #' @export
 #'  
 #' @examples

@@ -10,7 +10,11 @@
 #' @return \item{Group.summary}{      summary of group datasets}
 #' @return \item{mean.between.data}{      matrix of Group mean}
 #' @return \item{mean.within.data}{     matrix of group centered data}
-#' @seealso  \code{\link{mgPCA}}, \code{\link{DGPA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{BGC}}, \code{\link{TBWvariance}}, \code{\link{iris}}   
+#' @seealso  \code{\link{mgPCA}}, \code{\link{DGPA}}, \code{\link{DCCSWA}}, 
+#' \code{\link{DSTATIS}}, \code{\link{BGC}}, 
+#' \code{\link{TBWvariance}}, \code{\link{iris}}   
+#' @importFrom grDevices dev.new hcl
+#' @importFrom stats aggregate
 #' @export
 #' @examples
 #' Data = iris[,-5]
@@ -27,7 +31,7 @@ summarize <- function(Data, Group){
   #=========================================================================
   #                              preparing Data
   #=========================================================================
-  if (class(Data) == 'data.frame') {
+  if (is.data.frame(Data) == TRUE) {
     Data=as.matrix(Data)
   }
   if(is.null(colnames(Data))) {

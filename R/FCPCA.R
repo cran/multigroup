@@ -41,7 +41,7 @@ FCPCA <-function(Data, Group, Scale=FALSE, graph=FALSE){
   #============================================================================
   #                              2. preparing Data
   #============================================================================
-  if (class(Data) == 'data.frame') {
+  if (is.data.frame(Data) == TRUE) {
     Data=as.matrix(Data)
   }
    if(is.null(colnames(Data))) {

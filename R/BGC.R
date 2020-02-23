@@ -17,7 +17,10 @@
 #' @return \item{loadings.common       }{Matrix of common loadings}
 #' @return \item{lambda       }{The specific variances of groups}
 #' @return \item{exp.var       }{Percentages of total variance recovered associated with each dimension }
-#' @seealso \code{\link{mgPCA}}, \code{\link{FCPCA}}, \code{\link{DCCSWA}}, \code{\link{DSTATIS}}, \code{\link{DGPA}}, \code{\link{summarize}}, \code{\link{TBWvariance}}, \code{\link{loadingsplot}}, \code{\link{scoreplot}}, \code{\link{iris}}  
+#' @seealso \code{\link{mgPCA}}, \code{\link{FCPCA}}, \code{\link{DCCSWA}}, 
+#' \code{\link{DSTATIS}}, \code{\link{DGPA}}, \code{\link{summarize}},
+#'  \code{\link{TBWvariance}}, \code{\link{loadingsplot}}, 
+#'  \code{\link{scoreplot}}, \code{\link{iris}}  
 #' @export
 #' 
 #' 
@@ -54,7 +57,7 @@ BGC <- function(Data, Group, numc=NULL, ncomp=NULL, Scale=FALSE, graph=FALSE){
   #=========================================================================
   #                              2. preparing Data
   #=========================================================================
-  if (class(Data) == 'data.frame') {
+  if (is.data.frame(Data) == TRUE) {
     Data=as.matrix(Data)
   }
   if(is.null(ncomp)) {ncomp=2}  

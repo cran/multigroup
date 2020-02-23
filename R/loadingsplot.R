@@ -6,15 +6,16 @@
 #' @param cex character expansion for text by default .85
 #' @param font.lab type of font by default 3
 #' @return loadings plot
+#' @importFrom graphics plot abline arrows text
 #' @export
 #' 
 #'  
 #' @examples
 #' Data = iris[,-5]
 #' Group = iris[,5]
-#' res.mgPCA = mgPCA (Data, Group, graph=TRUE)
+#' res.mgPCA = mgPCA(Data, Group, graph=TRUE)
 #' loadingsplot(res.mgPCA, axes=c(1,2))
-loadingsplot <- function(x, axes=c(1,2), INERTIE=NULL, cex=NULL, font.lab= NULL){
+loadingsplot <- function(x, axes = c(1,2), INERTIE = NULL, cex = NULL, font.lab = NULL){
   #=========================================================================
   #                       Preparing inputs
   #=========================================================================

@@ -18,16 +18,15 @@
 #' @return \item{coefficients}{Coefficients associated with  X data}
 #' @return \item{coefficients.Y}{Coefficients associated with regressing  Y on Global components X}
 #' @return \item{Components.Global}{Conctenated Components for X and Y}
-#' @return \item{Components.Group}{Components associated with groups in X}
+#' @return \item{Components.Group}{Components associated with groups in X and Y}
 #' @return \item{loadings.common}{Common vector of loadings for X and Y}
 #' @return \item{loadings.Group}{Group vector of loadings for X and Y}
 #' @return \item{expvar}{Explained variance associated with global components X}
 #' @return \item{cum.expvar.Group}{Cumulative explained varaince in groups of X and Y}
 #' @return \item{Similarity.Common.Group.load}{Cumulative similarity between group and common loadings}
 #' @return \item{Similarity.noncum.Common.Group.load}{ NonCumulative  similarity between group and common loadings}
-#' @return \item{eigenValue}{EigenValue to calculate the percentage of inertia}
-#' @return \item{Percentage.inertia.per.GroupX}{Percentages of inertia per group X}
 #' @seealso \code{\link{mgPCA}}, \code{\link{mbmgPCA}}
+#' @importFrom stats rnorm cov coefficients lm
 #' @export
 #' @references A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013). Multi-group PLS
 #' regressMathematics and Statistics, Springer Proceedings (ed), \emph{New Perspectives
@@ -54,15 +53,18 @@
 #' simY <- cbind(YY1,YY2)
 #' XLAB = paste("Dim1, %",res.mgPLS$noncumper.inertiglobal[1])
 #' YLAB = paste("Dim1, %",res.mgPLS$noncumper.inertiglobal[2])
-#' plot(simX[, 1], simX[, 2], pch=15, xlim=c(0, 1), ylim=c(0, 1), main="Similarity indices in X space", 
-#'      xlab=XLAB, ylab=YLAB)
+#' plot(simX[, 1], simX[, 2], pch=15, xlim=c(0, 1), ylim=c(0, 1),
+#'                             main="Similarity indices in X space",
+#'                             xlab=XLAB, ylab=YLAB)
 #' abline(h=seq(0, 1, by=0.2), col="black", lty=3)
 #' text(simX[, 1], simX[, 2], labels=rownames(simX), pos=2)
-#' plot(simY[, 1], simY[, 2], pch=15, xlim=c(0, 1), ylim=c(0, 1), main="Similarity indices in Y space",
-#'      xlab=XLAB, ylab=YLAB)
+#' plot(simY[, 1], simY[, 2], pch=15, xlim=c(0, 1), ylim=c(0, 1), 
+#'                              main="Similarity indices in Y space",
+#'                                        xlab=XLAB, ylab=YLAB)
 #' abline(h=seq(0, 1, by=0.2), col="black", lty=3)
 #' text(simY[, 1], simY[, 2], labels=rownames(simY), pos=2)
-mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gscale=FALSE){
+mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, 
+                                  Gcenter=FALSE, Gscale=FALSE){
   #=========================================================================
   #                               Checking the inputs
   #=========================================================================
@@ -74,10 +76,10 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   #=========================================================================
   #                               Preparing Data
   #=========================================================================
-  if (class(DataX) == 'data.frame') {
+  if (is.data.frame(DataX) == TRUE) {
     DataX = as.matrix(DataX)
   }
-  if (class(DataY) == 'data.frame') {
+  if (is.data.frame(DataY) == TRUE) {
     DataY = as.matrix(DataY)
   }
   if(is.null(ncomp)) {ncomp = 2}
@@ -179,22 +181,13 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   #------------------------
   res$noncumper.inertiglobal = matrix(0, ncol=ncomp, nrow=1)
   colnames(res$noncumper.inertiglobal) = paste("Dim", 1:ncomp, sep="")
-  #---------------
-  #eigen value
-  res$eigenValue = NULL
-  #res$WeigenValue = matrix(0,ncol=ncomp,nrow=ncol(DataX))
-  #---------- Percentage.inertia.per.GroupX
-  res$Percentage.inertia.per.GroupX = matrix(0, nrow=M, ncol= ncomp)
-  rownames(res$Percentage.inertia.per.GroupX) = levels(Group)
-  colnames(res$Percentage.inertia.per.GroupX) = paste("Dim", 1:ncomp, sep="")
-  
   #=========================================================================
   #                      NIPALS algorithm for multigroup PLS data
   #=========================================================================
   for(h in 1:H){
     eps = 1e-6     # for iteration loops
     #w= svd(t(Concat.X) %*% Concat.Y) $u[,1] # initial value of w
-    w = rnorm(P)
+    w = stats::rnorm(P)
     w = w/as.numeric(sqrt(t(w)%*%w))  # normalize w
     #-------------------------------
     x=1.0;
@@ -272,17 +265,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
       covvm[iter] = sum_cov
       #---------------------------- #
     }# end of iteration
-   
-    #--------------------------------
-    #eigen value
-    VVeigen=0   #--- v=sum (Xm' * Ym)
-    for(m in 1: M){
-      VVeigen = VVeigen + (t(DataXm[[m]])%*% DataYm[[m]])
-    }
-    WWeigen=VVeigen%*%t(VVeigen)
-    #--- 2. common loadings
-   ## res$WeigenValue[,h] =  eigen(WWeigen)$vectors[,1]
-    res$eigenValue[h]   =  eigen(WWeigen)$values[1]/(N-1)^2 #eigen(WWeigen)$values[1]/(N-1)^2 
     #---------------------------- #   
     aCommonX[,h] = wTold
     TGlobalX[,h] = t 
@@ -393,15 +375,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   similarityB =similarity_function(loadings_matrices=loadings_matricesV, NAMES)
   similarityA_noncum = similarity_noncum(loadings_matrices=loadings_matricesW, NAMES)
   similarityB_noncum = similarity_noncum(loadings_matrices=loadings_matricesV, NAMES)
- 
-  #-------------------------------------------------------------------
-  Pct_vartm = matrix(0, nrow=M, ncol= ncomp)
-  for (m in 1:M){
-    Pct_vartm[m, ] <- apply(TGroupX[[m]], 2, var) / sum(apply(TGroupX[[m]], 2, var))*100
-  }
-  
-  rownames(Pct_vartm) = levels(Group)
-  colnames(Pct_vartm) = paste("Dim", 1:H, sep="")
   #------------------------------------------------------------------
   rownames(aCommonX) = colnames(res$Concat.X)
   rownames(bCommonY) = colnames(res$Concat.Y)
@@ -416,7 +389,7 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
     colnames(TGroupX[[m]]) = paste("Dim", 1:H, sep="")
   }
   res$Components.Global  = list(X = TGlobalX, Y = UGlobalY)
-  res$Components.Group   = TGroupX
+  res$Components.Group   = list(X = TGroupX)
   res$loadings.common    = list(X = aCommonX, Y = bCommonY)
   res$loadings.Group     = list(X = aGroupX, Y = bGroupY)
   colnames(cum.expvar.Xm) = paste("Dim", 1:H, sep="")
@@ -429,8 +402,6 @@ mgPLS = function(DataX, DataY, Group, ncomp=NULL, Scale=FALSE, Gcenter=FALSE, Gs
   
   res$Similarity.Common.Group.load          = list(X = similarityA, Y = similarityB)
   res$Similarity.noncum.Common.Group.load   = list(X = similarityA_noncum , Y = similarityB_noncum)
-  res$Percentage.inertia.per.GroupX = Pct_vartm
-  
   #----------------------------------
   class(res) = c("mgPLS", "mg")
   return(res)

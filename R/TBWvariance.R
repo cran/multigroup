@@ -16,7 +16,8 @@
 #' @references A. Eslami, E. M. Qannari, A. Kohler and S. Bougeard (2013). General overview
 #'  of methods of analysis of multi-group datasets,
 #'  \emph{Revue des Nouvelles Technologies de l'Information}, 25, 108-123.
-#'  
+#'
+#' @importFrom stats model.matrix var    
 #' @examples
 #' Data = iris[,-5]
 #' Group = iris[,5]
@@ -32,7 +33,7 @@ TBWvariance <- function(Data, Group){
   #=========================================================================
   #                              2. preparing Data
   #=========================================================================
-  if (class(Data) == 'data.frame') {
+  if (is.data.frame(Data) == TRUE) {
     Data=as.matrix(Data)
   }
   if(is.null(colnames(Data))) {
@@ -59,7 +60,9 @@ TBWvariance <- function(Data, Group){
  
   Data = scale(Data, center=TRUE, scale= FALSE) 
   dummay.matrix = model.matrix(~-1 + Group)   
-  proj = dummay.matrix %*% solve(t(dummay.matrix) %*% dummay.matrix) %*% t(dummay.matrix) # proj matrix to calculate mean in each level
+  proj = dummay.matrix %*% solve(t(dummay.matrix) %*% 
+                                   dummay.matrix) %*% t(dummay.matrix) 
+  # proj matrix to calculate mean in each level
   res$between.data = proj %*% Data
   res$within.data  = Data - res$between.data
     
